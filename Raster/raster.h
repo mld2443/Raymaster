@@ -14,10 +14,12 @@
 #else
 	#include <GL/glut.h>
 #endif
+#include <random>
 #include <math.h>
 #include <list>
 
-#include "shape.h"
+#include "plane.h"
+#include "sphere.h"
 
 class raster {
 public:
@@ -37,9 +39,13 @@ public:
 	
 	void addShape(shape*);
 	
-	GLubyte* render(const int&, const int&, const unsigned int&) const;
+	GLfloat* render(const int&, const int&, const unsigned int&) const;
 
 private:
+	void castRay(GLfloat*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const unsigned int&) const;
+	
+	std::default_random_engine *m_rng;
+	std::uniform_real_distribution<float> *m_unif;
 	std::list<shape*> *m_shapes;
 	FLOAT3 m_eyePos, m_eyeDir;
 	float m_fovX, m_lowFrustrum, m_highFrustrum;

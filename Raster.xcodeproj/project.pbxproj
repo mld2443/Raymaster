@@ -12,7 +12,7 @@
 		C9F9AC661C68465A0074A0A4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F9AC651C68465A0074A0A4 /* OpenGL.framework */; };
 		C9F9AC681C68465F0074A0A4 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F9AC671C68465F0074A0A4 /* GLUT.framework */; };
 		C9F9AC6C1C6863D00074A0A4 /* plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC6A1C6863D00074A0A4 /* plane.cpp */; };
-		C9F9AC6F1C6864A30074A0A4 /* shpere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC6D1C6864A30074A0A4 /* shpere.cpp */; };
+		C9F9AC6F1C6864A30074A0A4 /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */; };
 		C9F9AC721C6865540074A0A4 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC701C6865540074A0A4 /* shape.cpp */; };
 /* End PBXBuildFile section */
 
@@ -39,8 +39,8 @@
 		C9F9AC671C68465F0074A0A4 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		C9F9AC6A1C6863D00074A0A4 /* plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plane.cpp; sourceTree = "<group>"; };
 		C9F9AC6B1C6863D00074A0A4 /* plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plane.h; sourceTree = "<group>"; };
-		C9F9AC6D1C6864A30074A0A4 /* shpere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shpere.cpp; sourceTree = "<group>"; };
-		C9F9AC6E1C6864A30074A0A4 /* shpere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shpere.h; sourceTree = "<group>"; };
+		C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
+		C9F9AC6E1C6864A30074A0A4 /* sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sphere.h; sourceTree = "<group>"; };
 		C9F9AC701C6865540074A0A4 /* shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,7 +82,7 @@
 				C9F9AC611C6845E30074A0A4 /* raster.cpp */,
 				C9F9AC701C6865540074A0A4 /* shape.cpp */,
 				C9F9AC6A1C6863D00074A0A4 /* plane.cpp */,
-				C9F9AC6D1C6864A30074A0A4 /* shpere.cpp */,
+				C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */,
 				C9F9AC691C6846790074A0A4 /* Headers */,
 			);
 			path = Raster;
@@ -95,7 +95,7 @@
 				C9F9AC621C6845E30074A0A4 /* raster.h */,
 				C9F9AC641C6845EC0074A0A4 /* shape.h */,
 				C9F9AC6B1C6863D00074A0A4 /* plane.h */,
-				C9F9AC6E1C6864A30074A0A4 /* shpere.h */,
+				C9F9AC6E1C6864A30074A0A4 /* sphere.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -157,7 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9F9AC721C6865540074A0A4 /* shape.cpp in Sources */,
-				C9F9AC6F1C6864A30074A0A4 /* shpere.cpp in Sources */,
+				C9F9AC6F1C6864A30074A0A4 /* sphere.cpp in Sources */,
 				C9F9AC6C1C6863D00074A0A4 /* plane.cpp in Sources */,
 				C9F9AC631C6845E30074A0A4 /* raster.cpp in Sources */,
 				C9F9AC5A1C6845C20074A0A4 /* main.cpp in Sources */,

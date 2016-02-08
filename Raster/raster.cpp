@@ -8,6 +8,8 @@
 #include "raster.h"
 
 raster::raster() {
+	m_rng = 0;
+	m_unif = 0;
 	m_shapes = 0;
 }
 
@@ -27,10 +29,19 @@ bool raster::initialize(const FLOAT3& p, const FLOAT3& d, const float& f, const 
 	if (low > high)
 		return false;
 	
+	m_rng = new std::default_random_engine();
+	m_unif = new std::uniform_real_distribution<float>(0, 1);
+	
 	return true;
 }
 
 void raster::shutdown() {
+	delete m_rng;
+	m_rng = 0;
+	
+	delete m_unif;
+	m_unif = 0;
+	
 	for (shape *s : *m_shapes) {
 		s->shutdown();
 		delete s;
@@ -74,15 +85,13 @@ void raster::addShape(shape *s) {
 }
 
 
-/*void setpixel(GLubyte *pixels, const int size, const int x, const int y, const int c, const GLubyte val) {
-	pixels[((size*y)+x)*3+c] = val;
-}*/
-
-
-GLubyte* raster::render(const int& w, const int& h, const unsigned int& AA) const {
-	GLubyte *pixels = new GLubyte[w * h * 3];
+GLfloat* raster::render(const int& w, const int& h, const unsigned int& AA) const {
+	unsigned long pixindex;
+	GLfloat *pixels = new GLfloat[w * h * 3];
 	FLOAT3 vRay, hRay, rightDir, upDir, rightInc, upInc, P00, P10, P01, P11;
 	float fovY, uWidth, vHeight;
+	
+	pixindex = 0;
 
 	fovY = (h / w) * m_fovX;
 	
@@ -105,15 +114,51 @@ GLubyte* raster::render(const int& w, const int& h, const unsigned int& AA) cons
 	for (int j = 0; j < h; ++j) {
 		hRay = vRay;
 		for (int i = 0; i < w; ++i) {
-			//setpixel(pixels, w, i, j, 0, 127);
+			// background color
+			pixels[pixindex] = 0.0;
+			pixels[pixindex+1] = 0.0;
+			pixels[pixindex+2] = 0.0;
 			
+			castRay(pixels + pixindex, hRay, rightInc, upInc, AA);
 			
-			
+			// increments
 			hRay += rightInc;
+			pixindex += 3;
 		}
 		vRay += upInc;
 	}
 	
-	
 	return pixels;
+}
+
+
+void raster::castRay(GLfloat *pixel, const FLOAT3& orig, const FLOAT3& uInc, const FLOAT3& vInc, const unsigned int& AA) const {
+	for (int samples = 0; samples < AA; ++samples) {
+		float r1, r2, zValue;
+		FLOAT3 sample, ray, color;
+		
+		r1 = (*m_unif)(*m_rng), r2 = (*m_unif)(*m_rng);
+		
+		sample = orig + (vInc * r1) + (uInc * r2);
+		ray = (sample - m_eyePos).normalize();
+		
+		zValue = m_highFrustrum;
+		color = {0.0, 0.0, 0.0};
+		
+		for (shape *s : *m_shapes) {
+			float intersect = s->intersectRay(m_eyePos, ray);
+			if (intersect > m_lowFrustrum && intersect < zValue) {
+				zValue = intersect;
+				color = s->getColor();
+			}
+		}
+		
+		pixel[0] += color.x;
+		pixel[1] += color.y;
+		pixel[2] += color.z;
+	}
+	
+	pixel[0] /= float(AA);
+	pixel[1] /= float(AA);
+	pixel[2] /= float(AA);
 }

@@ -1,11 +1,11 @@
 //
-//	shpere.cpp
+//	sphere.cpp
 //	Raster
 //
 //	Created by Matthew Dillard on 2/7/16.
 //
 
-#include "shpere.h"
+#include "sphere.h"
 
 sphere::sphere() {
 	m_pos = 0;

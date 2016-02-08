@@ -1,18 +1,18 @@
 //
-//	shpere.h
+//	sphere.h
 //	Raster
 //
 //	Created by Matthew Dillard on 2/7/16.
 //
 
-#ifndef shpere_h
-#define shpere_h
+#ifndef sphere_h
+#define sphere_h
 
 #include <math.h>
 
 #include "shape.h"
 
-class sphere : shape {
+class sphere : public shape {
 public:
 	sphere();
 	~sphere();
@@ -27,4 +27,4 @@ public:
 private:
 };
 
-#endif /* shpere_h */
+#endif /* sphere_h */

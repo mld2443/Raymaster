@@ -10,7 +10,7 @@
 
 #include "shape.h"
 
-class plane : shape {
+class plane : public shape {
 public:
 	plane();
 	~plane();

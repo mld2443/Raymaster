@@ -22,7 +22,7 @@ plane::~plane() {
 bool plane::initialize(const FLOAT3& p, const FLOAT3& c, const FLOAT3& n, const float&){
 	m_pos = new FLOAT3(p);
 	m_color = new FLOAT3(c);
-	m_normal = new FLOAT3(n);
+	m_normal = new FLOAT3(n.normalize());
 	m_radius = new float(n.dot(p));
 	
 	return true;
