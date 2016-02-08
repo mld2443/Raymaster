@@ -8,6 +8,8 @@
 #ifndef shpere_h
 #define shpere_h
 
+#include <math.h>
+
 #include "shape.h"
 
 class sphere : shape {
@@ -15,16 +17,14 @@ public:
 	sphere();
 	~sphere();
 
-	bool initialize(const FLOAT3&, const FLOAT3&);
+	bool initialize(const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&);
 	void shutdown();
 	
-	void setRadius(const float&);
-
 	shapetype getType() const;
-	float getRadius() const;
+	
+	float intersectRay(const FLOAT3&, const FLOAT3&) const;
 	
 private:
-	float *m_radius;
 };
 
 #endif /* shpere_h */

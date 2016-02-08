@@ -14,3 +14,11 @@ FLOAT3 shape::getPos() const {
 FLOAT3 shape::getColor() const {
 	return *m_color;
 }
+
+FLOAT3 shape::getNormal() const {
+	return *m_normal;
+}
+
+float shape::getRadius() const {
+	return *m_radius;
+}

@@ -21,28 +21,22 @@
 
 int mouseX = -1, mouseY = -1;
 int window = 0;
-unsigned int num_pixels;
 bool mouseLeftDown = false, mouseRightDown = false;
-bool drawImage = false;
 
 raster *tracer;
-
-int smoothness = 25, iter = 512;
-//list<point<float>> points;
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	glFlush();
 
-	if (drawImage) {
-		num_pixels = glutGet(GLUT_WINDOW_WIDTH) * glutGet(GLUT_WINDOW_HEIGHT) * 3;
-		GLubyte *pixels = new GLubyte[num_pixels];
+	GLubyte *pixels = tracer->render(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), 1);
 
-		glDrawPixels(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, pixels);
-		glFlush();
-		delete[] pixels;
-	}
+	glDrawPixels(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	
+	glFlush();
+	
+	delete[] pixels;
 
 	glutSwapBuffers();
 }
@@ -61,7 +55,10 @@ void init() {
 
 	tracer = new raster();
 
-	tracer->initialize();
+	//tracer->initialize({-4,-2,-4}, {4,2,4}, 90.0, 2.0, 100.0);
+	tracer->initialize({0,0,0}, {-1,0,0}, 90.0, 2.0, 100.0);
+	
+	glutPostRedisplay();
 }
 
 void mouse(int button, int state, int x, int y) {

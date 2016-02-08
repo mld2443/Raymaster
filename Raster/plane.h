@@ -15,16 +15,14 @@ public:
 	plane();
 	~plane();
 
-	bool initialize(const FLOAT3&, const FLOAT3&);
+	bool initialize(const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&);
 	void shutdown();
 	
-	void setNormal(const FLOAT3&);
-
 	shapetype getType() const;
-	FLOAT3 getNormal() const;
+	
+	float intersectRay(const FLOAT3&, const FLOAT3&) const;
 	
 private:
-	FLOAT3 *m_normal;
 };
 
 #endif /* plane_h */

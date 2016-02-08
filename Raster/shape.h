@@ -14,17 +14,20 @@ class shape {
 public:
 	enum shapetype { plane, sphere, cylinder };
 
-	virtual bool initialize(const FLOAT3&, const FLOAT3&) =0;
+	virtual bool initialize(const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&) =0;
 	virtual void shutdown() =0;
 	
-	void setNormal(const FLOAT3&);
-
 	virtual shapetype getType() const =0;
 	FLOAT3 getPos() const;
 	FLOAT3 getColor() const;
+	FLOAT3 getNormal() const;
+	float getRadius() const;
+	
+	virtual float intersectRay(const FLOAT3&, const FLOAT3&) const =0;
 
 protected:
-	FLOAT3 *m_pos, *m_color;
+	FLOAT3 *m_pos, *m_color, *m_normal;
+	float *m_radius;
 };
 
 #endif /* shape_h */
