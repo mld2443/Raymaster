@@ -43,8 +43,22 @@ void raster::shutdown() {
 	m_unif = 0;
 	
 	for (shape *s : *m_shapes) {
-		s->shutdown();
-		delete s;
+		switch (s->getType()) {
+			case shape::plane:
+				delete (plane*)s;
+				break;
+				
+			case shape::sphere:
+				delete (sphere*)s;
+				break;
+				
+			case shape::cylinder:
+				delete (cylinder*)s;
+				break;
+				
+			default:
+				break;
+		}
 		s = 0;
 	}
 	

@@ -14,6 +14,7 @@
 		C9F9AC6C1C6863D00074A0A4 /* plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC6A1C6863D00074A0A4 /* plane.cpp */; };
 		C9F9AC6F1C6864A30074A0A4 /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */; };
 		C9F9AC721C6865540074A0A4 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC701C6865540074A0A4 /* shape.cpp */; };
+		C9F9AC751C6992DE0074A0A4 /* cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC731C6992DE0074A0A4 /* cylinder.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +43,8 @@
 		C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
 		C9F9AC6E1C6864A30074A0A4 /* sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sphere.h; sourceTree = "<group>"; };
 		C9F9AC701C6865540074A0A4 /* shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cpp; sourceTree = "<group>"; };
+		C9F9AC731C6992DE0074A0A4 /* cylinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cylinder.cpp; sourceTree = "<group>"; };
+		C9F9AC741C6992DE0074A0A4 /* cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cylinder.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,7 @@
 				C9F9AC701C6865540074A0A4 /* shape.cpp */,
 				C9F9AC6A1C6863D00074A0A4 /* plane.cpp */,
 				C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */,
+				C9F9AC731C6992DE0074A0A4 /* cylinder.cpp */,
 				C9F9AC691C6846790074A0A4 /* Headers */,
 			);
 			path = Raster;
@@ -96,6 +100,7 @@
 				C9F9AC641C6845EC0074A0A4 /* shape.h */,
 				C9F9AC6B1C6863D00074A0A4 /* plane.h */,
 				C9F9AC6E1C6864A30074A0A4 /* sphere.h */,
+				C9F9AC741C6992DE0074A0A4 /* cylinder.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 				C9F9AC6C1C6863D00074A0A4 /* plane.cpp in Sources */,
 				C9F9AC631C6845E30074A0A4 /* raster.cpp in Sources */,
 				C9F9AC5A1C6845C20074A0A4 /* main.cpp in Sources */,
+				C9F9AC751C6992DE0074A0A4 /* cylinder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

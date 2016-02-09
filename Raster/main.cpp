@@ -57,41 +57,17 @@ void init() {
 
 	tracer = new raster();
 
-	//tracer->initialize({-4,-2,-4}, {4,2,4}, 90.0, 2.0, 100.0);
-	tracer->initialize({0,10,-8}, {-30,-10,8}, 90.0, 2.0, 100.0);
+	tracer->initialize({0,10,-8}, {-30,-10,8}, 90.0, 2.0, 1000.0);
 	
-	shape *ball1 = new sphere();
-	ball1->initialize({-30.0,0.0,0.0}, {0.9,0.9,1.0}, {}, 10.0);
-	
-	shape *ball2 = new sphere();
-	ball2->initialize({-30.0,7.0,0.0}, {0.5,0.2,0.1}, {}, 10.0);
-	
-	shape *ball3 = new sphere();
-	ball3->initialize({-30.0,-7.0,0.0}, {0.2,0.5,0.6}, {}, 10.0);
-	
-	shape *ball4 = new sphere();
-	ball4->initialize({-30.0,3.0,5.0}, {0.0,0.5,0.0}, {}, 10.0);
-	
-	shape *ball5 = new sphere();
-	ball5->initialize({-30.0,-3.0,5.0}, {0.4,0.8,0.0}, {}, 10.0);
-	
-	shape *ball6 = new sphere();
-	ball6->initialize({-30.0,-3.0,-5.0}, {0.2,0.1,0.7}, {}, 10.0);
-	
-	shape *ball7 = new sphere();
-	ball7->initialize({-30.0,3.0,-5.0}, {0.9,0.4,0.0}, {}, 10.0);
-	
-	shape *wall1 = new plane();
-	wall1->initialize({-80,0,0}, {1.0,1.0,0.0}, {1,0,0}, 0);
-	
-	tracer->addShape(ball1);
-	tracer->addShape(ball2);
-	tracer->addShape(ball3);
-	tracer->addShape(ball4);
-	tracer->addShape(ball5);
-	tracer->addShape(ball6);
-	tracer->addShape(ball7);
-	tracer->addShape(wall1);
+	/*tracer->addShape(new sphere({-30.0,0.0,0.0}, {0.9,0.9,1.0}, 10.0));
+	tracer->addShape(new sphere({-30.0,7.0,0.0}, {0.5,0.2,0.1}, 10.0));
+	tracer->addShape(new sphere({-30.0,-7.0,0.0}, {0.2,0.5,0.6}, 10.0));
+	tracer->addShape(new sphere({-30.0,3.0,5.0}, {0.0,0.5,0.0}, 10.0));
+	tracer->addShape(new sphere({-30.0,-3.0,5.0}, {0.4,0.8,0.0}, 10.0));
+	tracer->addShape(new sphere({-30.0,-3.0,-5.0}, {0.2,0.1,0.7}, 10.0));
+	tracer->addShape(new sphere({-30.0,3.0,-5.0}, {0.9,0.4,0.0}, 10.0));*/
+	tracer->addShape(new plane({-60,0,0}, {1.0,1.0,0.0}, {1,0,0}));
+	tracer->addShape(new cylinder({-20,0,0}, {0.9,0.4,0.0}, {1,2,1}, 5.0));
 	
 	glutPostRedisplay();
 }

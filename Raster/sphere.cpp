@@ -7,26 +7,13 @@
 
 #include "sphere.h"
 
-sphere::sphere() {
-	m_pos = 0;
-	m_color = 0;
-	m_radius = 0;
-}
-
-sphere::~sphere() {
-	
-}
-
-
-bool sphere::initialize(const FLOAT3& p, const FLOAT3& c, const FLOAT3&, const float& r){
+sphere::sphere(const FLOAT3& p, const FLOAT3& c, const float& r) {
 	m_pos = new FLOAT3(p);
 	m_color = new FLOAT3(c);
 	m_radius = new float(r);
-	
-	return true;
 }
 
-void sphere::shutdown() {
+sphere::~sphere() {
 	delete m_pos;
 	m_pos = 0;
 	

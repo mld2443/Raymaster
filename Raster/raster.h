@@ -20,6 +20,7 @@
 
 #include "plane.h"
 #include "sphere.h"
+#include "cylinder.h"
 
 class raster {
 public:

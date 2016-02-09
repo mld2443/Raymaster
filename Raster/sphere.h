@@ -14,12 +14,9 @@
 
 class sphere : public shape {
 public:
-	sphere();
+	sphere(const FLOAT3&, const FLOAT3&, const float&);
 	~sphere();
 
-	bool initialize(const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&);
-	void shutdown();
-	
 	shapetype getType() const;
 	
 	float intersectRay(const FLOAT3&, const FLOAT3&) const;

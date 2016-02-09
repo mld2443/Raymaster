@@ -15,8 +15,8 @@ FLOAT3 shape::getColor() const {
 	return *m_color;
 }
 
-FLOAT3 shape::getNormal() const {
-	return *m_normal;
+FLOAT3 shape::getDir() const {
+	return *m_dir;
 }
 
 float shape::getRadius() const {
