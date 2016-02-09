@@ -59,15 +59,15 @@ void init() {
 
 	tracer->initialize({0,10,-8}, {-30,-10,8}, 90.0, 2.0, 1000.0);
 	
-	/*tracer->addShape(new sphere({-30.0,0.0,0.0}, {0.9,0.9,1.0}, 10.0));
-	tracer->addShape(new sphere({-30.0,7.0,0.0}, {0.5,0.2,0.1}, 10.0));
-	tracer->addShape(new sphere({-30.0,-7.0,0.0}, {0.2,0.5,0.6}, 10.0));
-	tracer->addShape(new sphere({-30.0,3.0,5.0}, {0.0,0.5,0.0}, 10.0));
-	tracer->addShape(new sphere({-30.0,-3.0,5.0}, {0.4,0.8,0.0}, 10.0));
-	tracer->addShape(new sphere({-30.0,-3.0,-5.0}, {0.2,0.1,0.7}, 10.0));
-	tracer->addShape(new sphere({-30.0,3.0,-5.0}, {0.9,0.4,0.0}, 10.0));*/
-	tracer->addShape(new plane({-60,0,0}, {1.0,1.0,0.0}, {1,0,0}));
-	tracer->addShape(new cylinder({-20,0,0}, {0.9,0.4,0.0}, {1,2,1}, 5.0));
+	tracer->addShape(new sphere({0.9,0.9,1.0}, {-30.0,0.0,0.0}, 11.0));
+	tracer->addShape(new sphere({0.5,0.2,0.1}, {-30.0,7.0,0.0}, 10.0));
+	tracer->addShape(new sphere({0.2,0.5,0.6}, {-30.0,-7.0,0.0}, 10.0));
+	tracer->addShape(new sphere({0.0,0.5,0.0}, {-30.0,3.0,5.0}, 10.0));
+	tracer->addShape(new sphere({0.4,0.8,0.0}, {-30.0,-3.0,5.0}, 10.0));
+	tracer->addShape(new sphere({0.2,0.1,0.7}, {-30.0,-3.0,-5.0}, 10.0));
+	tracer->addShape(new sphere({0.9,0.4,0.0}, {-30.0,3.0,-5.0}, 10.0));
+	tracer->addShape(new plane({1.0,1.0,0.0}, {-60,0,0}, {1,0,0}));
+	tracer->addShape(new cylinder({0.2,0.0,0.3}, {-30,0,0}, {1,2,1}, 5.0));
 	
 	glutPostRedisplay();
 }

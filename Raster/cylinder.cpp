@@ -7,19 +7,19 @@
 
 #include "cylinder.h"
 
-cylinder::cylinder(const FLOAT3& p, const FLOAT3& c, const FLOAT3& d, const float& r) {
-	m_pos = new FLOAT3(p);
+cylinder::cylinder(const FLOAT3& c, const FLOAT3& p, const FLOAT3& d, const float& r) {
 	m_color = new FLOAT3(c);
+	m_pos = new FLOAT3(p);
 	m_dir = new FLOAT3(d.normalize());
 	m_radius = new float(r);
 }
 
 cylinder::~cylinder() {
-	delete m_pos;
-	m_pos = 0;
-	
 	delete m_color;
 	m_color = 0;
+	
+	delete m_pos;
+	m_pos = 0;
 	
 	delete m_dir;
 	m_dir = 0;

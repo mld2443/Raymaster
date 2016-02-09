@@ -14,12 +14,12 @@
 
 class sphere : public shape {
 public:
-	sphere(const FLOAT3&, const FLOAT3&, const float&);
+	sphere(const FLOAT3& color, const FLOAT3& position, const float& radius);
 	~sphere();
 
 	shapetype getType() const;
 	
-	float intersectRay(const FLOAT3&, const FLOAT3&) const;
+	float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const;
 	
 private:
 };

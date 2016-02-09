@@ -15,15 +15,15 @@ public:
 	enum shapetype { plane, sphere, cylinder };
 
 	virtual shapetype getType() const =0;
-	FLOAT3 getPos() const;
 	FLOAT3 getColor() const;
+	FLOAT3 getPos() const;
 	FLOAT3 getDir() const;
 	float getRadius() const;
 	
-	virtual float intersectRay(const FLOAT3&, const FLOAT3&) const =0;
+	virtual float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const =0;
 
 protected:
-	FLOAT3 *m_pos, *m_color, *m_dir;
+	FLOAT3 *m_color, *m_pos, *m_dir;
 	float *m_radius;
 };
 

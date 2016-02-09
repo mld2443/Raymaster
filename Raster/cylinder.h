@@ -14,12 +14,12 @@
 
 class cylinder : public shape {
 public:
-	cylinder(const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&);
+	cylinder(const FLOAT3& color, const FLOAT3& position, const FLOAT3& direction, const float& radius);
 	~cylinder();
 	
 	shapetype getType() const;
 	
-	float intersectRay(const FLOAT3&, const FLOAT3&) const;
+	float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const;
 	
 private:
 };

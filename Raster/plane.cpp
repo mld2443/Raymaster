@@ -7,19 +7,19 @@
 
 #include "plane.h"
 
-plane::plane(const FLOAT3& p, const FLOAT3& c, const FLOAT3& n) {
-	m_pos = new FLOAT3(p);
+plane::plane(const FLOAT3& c, const FLOAT3& p, const FLOAT3& n) {
 	m_color = new FLOAT3(c);
+	m_pos = new FLOAT3(p);
 	m_dir = new FLOAT3(n.normalize());
 	m_radius = new float(n.dot(p));
 }
 
 plane::~plane() {
-	delete m_pos;
-	m_pos = 0;
-	
 	delete m_color;
 	m_color = 0;
+	
+	delete m_pos;
+	m_pos = 0;
 	
 	delete m_dir;
 	m_dir = 0;

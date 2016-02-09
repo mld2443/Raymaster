@@ -12,12 +12,12 @@
 
 class plane : public shape {
 public:
-	plane(const FLOAT3&, const FLOAT3&, const FLOAT3&);
+	plane(const FLOAT3& color, const FLOAT3& position, const FLOAT3& normal);
 	~plane();
 
 	shapetype getType() const;
 	
-	float intersectRay(const FLOAT3&, const FLOAT3&) const;
+	float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const;
 	
 private:
 };
