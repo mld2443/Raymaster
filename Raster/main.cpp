@@ -15,8 +15,8 @@
 
 #include "raster.h"
 
-#define WINDOW_SIZEX 1280
-#define WINDOW_SIZEY 720
+#define WINDOW_SIZEX 540
+#define WINDOW_SIZEY 960
 #define WINDOW_OFFX 100
 #define WINDOW_OFFY 100
 
@@ -33,7 +33,7 @@ void display() {
 	
 	unsigned int width = glutGet(GLUT_WINDOW_WIDTH), height = glutGet(GLUT_WINDOW_HEIGHT);
 
-	GLfloat *pixels = tracer->render(width, height, 1);
+	GLfloat *pixels = tracer->render(width, height, 16);
 
 	glDrawPixels(width, height, GL_RGB, GL_FLOAT, pixels);
 	
@@ -56,20 +56,18 @@ void init() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	tracer = new raster();
-
-	tracer->initialize({30,10,-8}, {-60,-10,8}, 90.0, 2.0, 10000.0);
-	//tracer->initialize({0,0,0}, {-30,0,0}, 90.0, 2.0, 10000.0);
+	tracer = new raster({30,10,-8}, {-60,-10,8}, 30.0, 2.0, 10000.0);
+	//tracer = new raster({0,0,0}, {-30,0,0}, 90.0, 2.0, 10000.0);
 	
 	tracer->addShape(new sphere({0.9,0.9,1.0}, {-30.0,0.0,0.0}, 11.0));
-	//tracer->addShape(new sphere({0.5,0.2,0.1}, {-30.0,7.0,0.0}, 10.0));
-	//tracer->addShape(new sphere({0.2,0.5,0.6}, {-30.0,-7.0,0.0}, 10.0));
-	//tracer->addShape(new sphere({0.0,0.5,0.0}, {-30.0,3.0,5.0}, 10.0));
-	//tracer->addShape(new sphere({0.4,0.8,0.0}, {-30.0,-3.0,5.0}, 10.0));
-	//tracer->addShape(new sphere({0.2,0.1,0.7}, {-30.0,-3.0,-5.0}, 10.0));
-	//tracer->addShape(new sphere({0.9,0.4,0.0}, {-30.0,3.0,-5.0}, 10.0));
-	//tracer->addShape(new plane({1.0,1.0,0.0}, {-60,0,0}, {1,0,0}));
-	//tracer->addShape(new cylinder({0.2,0.0,0.3}, {-30,0,0}, {1,2,1}, 5.0));
+	tracer->addShape(new sphere({0.5,0.2,0.1}, {-30.0,7.0,0.0}, 10.0));
+	tracer->addShape(new sphere({0.2,0.5,0.6}, {-30.0,-7.0,0.0}, 10.0));
+	tracer->addShape(new sphere({0.0,0.5,0.0}, {-30.0,3.0,5.0}, 10.0));
+	tracer->addShape(new sphere({0.4,0.8,0.0}, {-30.0,-3.0,5.0}, 10.0));
+	tracer->addShape(new sphere({0.2,0.1,0.7}, {-30.0,-3.0,-5.0}, 10.0));
+	tracer->addShape(new sphere({0.9,0.4,0.0}, {-30.0,3.0,-5.0}, 10.0));
+	tracer->addShape(new plane({1.0,1.0,0.0}, {-60,0,0}, {1,0,0}));
+	tracer->addShape(new cylinder({0.2,0.0,0.3}, {-30,0,0}, {1,2,1}, 5.0));
 	
 	glutPostRedisplay();
 }
@@ -121,7 +119,7 @@ void key(unsigned char c, int x, int y) {
 			break;
 			
 		case 27: //escape
-			tracer->shutdown();
+			delete tracer;
 			
 			glutDestroyWindow(window);
 			exit(0);

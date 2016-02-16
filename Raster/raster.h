@@ -24,11 +24,8 @@
 
 class raster {
 public:
-	raster();
+	raster(const FLOAT3& CamPos, const FLOAT3& CamDir, const float& FOV, const float& NearClip, const float& FarClip);
 	~raster();
-
-	bool initialize(const FLOAT3&, const FLOAT3&, const float&, const float&, const float&);
-	void shutdown();
 
 	void setEyePos(const FLOAT3&);
 	void setLookDir(const FLOAT3&);

@@ -7,18 +7,7 @@
 
 #include "raster.h"
 
-raster::raster() {
-	m_rng = 0;
-	m_unif = 0;
-	m_shapes = 0;
-}
-
-raster::~raster() {
-	
-}
-
-
-bool raster::initialize(const FLOAT3& p, const FLOAT3& d, const float& f, const float& low, const float& high) {
+raster::raster(const FLOAT3& p, const FLOAT3& d, const float& f, const float& low, const float& high) {
 	m_shapes = new std::list<shape*>();
 	m_eyePos = p;
 	m_eyeDir = d.normalize();
@@ -26,16 +15,11 @@ bool raster::initialize(const FLOAT3& p, const FLOAT3& d, const float& f, const 
 	m_lowFrustrum = low;
 	m_highFrustrum = high;
 	
-	if (low > high)
-		return false;
-	
 	m_rng = new std::default_random_engine();
 	m_unif = new std::uniform_real_distribution<float>(0, 1);
-	
-	return true;
 }
 
-void raster::shutdown() {
+raster::~raster() {
 	delete m_rng;
 	m_rng = 0;
 	
@@ -103,17 +87,15 @@ GLfloat* raster::render(const unsigned int& w, const unsigned int& h, const unsi
 	unsigned long pixindex;
 	GLfloat *pixels = new GLfloat[w * h * 3];
 	FLOAT3 vRay, hRay, rightDir, upDir, P00, P10, P01;
-	float fovY, uWidth, vHeight;
+	float uWidth, vHeight;
 	
 	pixindex = 0;
-
-	fovY = ((float)h / (float)w) * m_fovX;
 	
 	rightDir = m_eyeDir.cross({0,1,0}).normalize();
 	upDir = rightDir.cross(m_eyeDir).normalize();
 	
 	uWidth = tanf((m_fovX / 2) * (M_PI / 180));
-	vHeight = tanf((fovY / 2) * (M_PI / 180));
+	vHeight = ((float)h / (float)w) * uWidth;
 	
 	P00 = m_eyePos + m_eyeDir - (rightDir * uWidth) - (upDir * vHeight);
 	P10 = m_eyePos + m_eyeDir + (rightDir * uWidth) - (upDir * vHeight);
