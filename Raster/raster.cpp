@@ -99,17 +99,17 @@ void raster::addShape(shape *s) {
 }
 
 
-GLfloat* raster::render(const int& w, const int& h, const unsigned int& AA) const {
+GLfloat* raster::render(const unsigned int& w, const unsigned int& h, const unsigned int& AA) const {
 	unsigned long pixindex;
 	GLfloat *pixels = new GLfloat[w * h * 3];
-	FLOAT3 vRay, hRay, rightDir, upDir, rightInc, upInc, P00, P10, P01, P11;
+	FLOAT3 vRay, hRay, rightDir, upDir, P00, P10, P01;
 	float fovY, uWidth, vHeight;
 	
 	pixindex = 0;
 
-	fovY = (h / w) * m_fovX;
+	fovY = ((float)h / (float)w) * m_fovX;
 	
-	rightDir = m_eyeDir.cross({0,0,1}).normalize();
+	rightDir = m_eyeDir.cross({0,1,0}).normalize();
 	upDir = rightDir.cross(m_eyeDir).normalize();
 	
 	uWidth = tanf((m_fovX / 2) * (M_PI / 180));
@@ -118,10 +118,9 @@ GLfloat* raster::render(const int& w, const int& h, const unsigned int& AA) cons
 	P00 = m_eyePos + m_eyeDir - (rightDir * uWidth) - (upDir * vHeight);
 	P10 = m_eyePos + m_eyeDir + (rightDir * uWidth) - (upDir * vHeight);
 	P01 = m_eyePos + m_eyeDir - (rightDir * uWidth) + (upDir * vHeight);
-	P11 = m_eyePos + m_eyeDir + (rightDir * uWidth) + (upDir * vHeight);
 	
-	rightInc = (P01 - P00) / (h + 1);
-	upInc = (P10 - P00) / (w + 1);
+	rightDir = (P10 - P00) / w;
+	upDir = (P01 - P00) / h;
 	
 	vRay = P00;
 	
@@ -133,13 +132,13 @@ GLfloat* raster::render(const int& w, const int& h, const unsigned int& AA) cons
 			pixels[pixindex+1] = 0.0;
 			pixels[pixindex+2] = 0.0;
 			
-			castRay(pixels + pixindex, hRay, rightInc, upInc, AA);
+			castRay(pixels + pixindex, hRay, rightDir, upDir, AA);
 			
 			// increments
-			hRay += rightInc;
+			hRay += rightDir;
 			pixindex += 3;
 		}
-		vRay += upInc;
+		vRay += upDir;
 	}
 	
 	return pixels;

@@ -40,7 +40,7 @@ public:
 	
 	void addShape(shape*);
 	
-	GLfloat* render(const int&, const int&, const unsigned int&) const;
+	GLfloat* render(const unsigned int&, const unsigned int&, const unsigned int&) const;
 
 private:
 	void castRay(GLfloat*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const unsigned int&) const;
