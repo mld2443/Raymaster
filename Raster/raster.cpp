@@ -91,7 +91,9 @@ GLfloat* raster::render(const unsigned int& w, const unsigned int& h, const unsi
 	
 	pixindex = 0;
 	
-	rightDir = m_eyeDir.cross({0,1,0}).normalize();
+	FLOAT3 up{0,1,0};
+	
+	rightDir = m_eyeDir.cross(up).normalize();
 	upDir = rightDir.cross(m_eyeDir).normalize();
 	
 	uWidth = tanf((m_fovX / 2) * (M_PI / 180));

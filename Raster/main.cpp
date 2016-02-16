@@ -15,8 +15,8 @@
 
 #include "raster.h"
 
-#define WINDOW_SIZEX 540
-#define WINDOW_SIZEY 960
+#define WINDOW_SIZEX 960
+#define WINDOW_SIZEY 540
 #define WINDOW_OFFX 100
 #define WINDOW_OFFY 100
 
@@ -56,7 +56,7 @@ void init() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	tracer = new raster({30,10,-8}, {-60,-10,8}, 30.0, 2.0, 10000.0);
+	tracer = new raster({30,10,-8}, {-60,-10,8}, 90.0, 2.0, 10000.0);
 	//tracer = new raster({0,0,0}, {-30,0,0}, 90.0, 2.0, 10000.0);
 	
 	tracer->addShape(new sphere({0.9,0.9,1.0}, {-30.0,0.0,0.0}, 11.0));
