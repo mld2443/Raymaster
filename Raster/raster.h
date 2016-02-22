@@ -21,6 +21,8 @@
 #include "plane.h"
 #include "sphere.h"
 #include "cylinder.h"
+#include "pointlight.h"
+#include "directionlight.h"
 
 class raster {
 public:
@@ -36,6 +38,7 @@ public:
 	float getFOV() const;
 	
 	void addShape(shape*);
+	void addLight(light*);
 	
 	GLfloat* render(const unsigned int&, const unsigned int&, const unsigned int&) const;
 
@@ -45,6 +48,7 @@ private:
 	std::default_random_engine *m_rng;
 	std::uniform_real_distribution<float> *m_unif;
 	std::list<shape*> *m_shapes;
+	std::list<light*> *m_lights;
 	FLOAT3 m_eyePos, m_eyeDir;
 	float m_fovX, m_lowFrustrum, m_highFrustrum;
 };

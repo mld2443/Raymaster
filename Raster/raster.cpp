@@ -82,6 +82,10 @@ void raster::addShape(shape *s) {
 	m_shapes->push_back(s);
 }
 
+void raster::addLight(light *l) {
+	m_lights->push_back(l);
+}
+
 
 GLfloat* raster::render(const unsigned int& w, const unsigned int& h, const unsigned int& AA) const {
 	unsigned long pixindex;
