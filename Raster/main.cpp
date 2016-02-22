@@ -13,17 +13,17 @@
 #endif
 #include <iostream>
 
-#include "raster.h"
+#include "filehandler.h"
 
-#define WINDOW_SIZEX 960
-#define WINDOW_SIZEY 540
 #define WINDOW_OFFX 100
 #define WINDOW_OFFY 100
 
 int mouseX = -1, mouseY = -1;
+int window_width = 960, window_height = 540;
 int window = 0;
 bool mouseLeftDown = false, mouseRightDown = false;
 
+filehandler *reader;
 raster *tracer;
 
 void display() {
@@ -44,7 +44,7 @@ void display() {
 	glutSwapBuffers();
 }
 
-void init() {
+void init(const char* file) {
 	/* select clearing color 	*/
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glDisable(GL_DEPTH_TEST);
@@ -55,19 +55,11 @@ void init() {
 	gluOrtho2D(0, glutGet(GLUT_WINDOW_WIDTH) - 1, glutGet(GLUT_WINDOW_HEIGHT) - 1, 0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	tracer = new raster({30,10,-8}, {-60,-10,8}, 90.0, 2.0, 10000.0);
-	//tracer = new raster({0,0,0}, {-30,0,0}, 90.0, 2.0, 10000.0);
 	
-	tracer->addShape(new sphere({0.9,0.9,1.0}, {-30.0,0.0,0.0}, 11.0));
-	tracer->addShape(new sphere({0.5,0.2,0.1}, {-30.0,7.0,0.0}, 10.0));
-	tracer->addShape(new sphere({0.2,0.5,0.6}, {-30.0,-7.0,0.0}, 10.0));
-	tracer->addShape(new sphere({0.0,0.5,0.0}, {-30.0,3.0,5.0}, 10.0));
-	tracer->addShape(new sphere({0.4,0.8,0.0}, {-30.0,-3.0,5.0}, 10.0));
-	tracer->addShape(new sphere({0.2,0.1,0.7}, {-30.0,-3.0,-5.0}, 10.0));
-	tracer->addShape(new sphere({0.9,0.4,0.0}, {-30.0,3.0,-5.0}, 10.0));
-	tracer->addShape(new plane({1.0,1.0,0.0}, {-60,0,0}, {1,0,0}));
-	tracer->addShape(new cylinder({0.2,0.0,0.3}, {-30,0,0}, {1,2,1}, 5.0));
+	reader = new filehandler();
+	tracer = reader->loadfile(file);
+	delete reader;
+	reader = 0;
 	
 	glutPostRedisplay();
 }
@@ -131,12 +123,29 @@ void key(unsigned char c, int x, int y) {
 }
 
 int main(int argc, char** argv) {
+	if (argc != 2 && argc != 4) {
+		printf("expected \"%s file.scene [width height]\"\n", argv[0]);
+		return 1;
+	}
+	
+	if (argc == 4) {
+		window_width = atoi(argv[2]);
+		window_height = atoi(argv[3]);
+	}
+	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
-	glutInitWindowSize(WINDOW_SIZEX, WINDOW_SIZEY);
+	glutInitWindowSize(window_width, window_height);
 	glutInitWindowPosition(WINDOW_OFFX, WINDOW_OFFY);
 	window = glutCreateWindow("CPSC 647 HW2");
-	init();
+	
+	init(argv[1]);
+	
+	if (!tracer) {
+		printf("ERROR: could not load scene\n");
+		return 2;
+	}
+	
 	glutReshapeFunc (reshape);
 	glutDisplayFunc(display);
 	glutMouseFunc(mouse);

@@ -8,6 +8,7 @@
 #ifndef float3_h
 #define float3_h
 
+#include <iostream>
 #include <math.h>
 
 struct FLOAT3 {
@@ -28,6 +29,9 @@ struct FLOAT3 {
 	float dot(const FLOAT3& v) const { return x*v.x + y*v.y + z*v.z; }
 	FLOAT3 cross(const FLOAT3& v) const { return {y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x}; }
 	FLOAT3 normalize() const { float mag = abs(); return {x/mag, y/mag, z/mag}; }
+	
+	friend std::istream& operator>>(std::istream&, FLOAT3&);
+	friend std::ostream& operator<<(std::ostream&, FLOAT3&);
 };
 
 #endif /* float3_h */
