@@ -6,3 +6,7 @@
 //
 
 #include "light.h"
+
+FLOAT3 light::getColor() const {
+	return *m_color;
+}

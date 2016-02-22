@@ -12,9 +12,13 @@
 
 class light {
 public:
+	enum lighttype { point, directional };
+	
+	virtual lighttype getType() const =0;
+	FLOAT3 getColor() const;
 	
 protected:
-	FLOAT3 *m_color;
+	FLOAT3 *m_color, *m_pos;
 };
 
 #endif /* light_h */

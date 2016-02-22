@@ -37,7 +37,7 @@ raster* filehandler::loadfile(const char *filename) {
 		}
 		
 		// define a camera
-		else if (token[0] == 'c' && token.size() == 1) {
+		else if (token == "c") {
 			if (input) {
 				delete input;
 				std::cout << "ERROR: camera defined more than once" << std::endl;
@@ -52,13 +52,13 @@ raster* filehandler::loadfile(const char *filename) {
 			input = new raster(pos, dir, fov, low, high);
 		}
 		
+		else if (!input) {
+			std::cout << "ERROR: camera undefined before adding plane to scene" << std::endl;
+			return 0;
+		}
+		
 		// add a new plane
-		else if (token[0] == 'p' && token.size() == 1) {
-			if (!input) {
-				std::cout << "ERROR: camera undefined before adding plane to scene" << std::endl;
-				return 0;
-			}
-			
+		else if (token == "p") {
 			FLOAT3 color, pos, normal;
 			
 			file >> color >> pos >> normal;
@@ -67,12 +67,7 @@ raster* filehandler::loadfile(const char *filename) {
 		}
 		
 		// add a new sphere
-		else if (token[0] == 's' && token.size() == 1) {
-			if (!input) {
-				std::cout << "ERROR: camera undefined before adding sphere to scene" << std::endl;
-				return 0;
-			}
-			
+		else if (token == "s") {
 			FLOAT3 color, pos;
 			float radius;
 			
@@ -82,18 +77,29 @@ raster* filehandler::loadfile(const char *filename) {
 		}
 		
 		// add a new sphere
-		else if (token[0] == 'q' && token.size() == 1) {
-			if (!input) {
-				std::cout << "ERROR: camera undefined before adding cylinder to scene" << std::endl;
-				return 0;
-			}
-			
+		else if (token == "q") {
 			FLOAT3 color, pos, normal;
 			float radius;
 			
 			file >> color >> pos >> normal >> radius;
 			
 			input->addShape(new cylinder(color, pos, normal, radius));
+		}
+		
+		else if (token == "pl") {
+			FLOAT3 color, pos;
+			
+			file >> color >> pos;
+			
+			input->addLight(new pointlight(color, pos));
+		}
+		
+		else if (token == "dl") {
+			FLOAT3 color, dir;
+			
+			file >> color >> dir;
+			
+			input->addLight(new directionlight(color, dir));
 		}
 		
 		// token is unrecognized

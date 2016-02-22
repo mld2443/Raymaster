@@ -11,7 +11,11 @@
 #include "light.h"
 
 class pointlight : public light {
+public:
+	pointlight(const FLOAT3& color, const FLOAT3& position);
+	~pointlight();
 	
+	lighttype getType() const;
 };
 
 #endif /* pointlight_h */
