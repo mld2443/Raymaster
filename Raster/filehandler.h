@@ -18,7 +18,7 @@ public:
 	filehandler();
 	~filehandler();
 	
-	raster* loadfile(const char*);
+	raster* loadfile(const char*, const unsigned int&, const unsigned int&);
 };
 
 #endif /* filehandler_h */

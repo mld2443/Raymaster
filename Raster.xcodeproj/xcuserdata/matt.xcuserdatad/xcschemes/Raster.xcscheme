@@ -67,6 +67,10 @@
             argument = "test.scene"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "1280 720"
+            isEnabled = "NO">
+         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>

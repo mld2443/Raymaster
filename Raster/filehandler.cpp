@@ -16,8 +16,9 @@ filehandler::~filehandler() {
 }
 
 
-raster* filehandler::loadfile(const char *filename) {
+raster* filehandler::loadfile(const char *filename, const unsigned int& width, const unsigned int& height) {
 	raster *input = 0;
+	camera *cam = 0;
 	std::ifstream file(filename);
 	std::string token;
 	
@@ -36,27 +37,56 @@ raster* filehandler::loadfile(const char *filename) {
 			getline(file, token);
 		}
 		
+		else if (token == "") {
+			//do nothing
+		}
+		
 		// define a camera
 		else if (token == "c") {
-			if (input) {
-				delete input;
+			if (cam) {
+				delete cam;
 				std::cout << "ERROR: camera defined more than once" << std::endl;
 				return 0;
 			}
 			
-			FLOAT3 pos, dir, ambient;
-			float fov, low, high, offset = 0.0;
+			FLOAT3 pos, look, up = {0,1,0};
+			float fov, low, high;
 			
-			file >> pos >> dir >> ambient >> fov >> low >> high >> std::ws;
+			file >> pos >> look >> fov >> low >> high >> std::ws;
 			
+			// optionally rotate the camera
+			if (file.peek() == '(')
+				file >> up;
+			
+			cam = new camera(pos, look, fov, low, high, up);
+		}
+		
+		else if (!cam) {
+			std::cout << "ERROR: camera must be defined first" << std::endl;
+			return 0;
+		}
+		
+		else if (token == "r") {
+			if (input) {
+				delete input;
+				std::cout << "ERROR: scene defined more than once" << std::endl;
+				return 0;
+			}
+			
+			FLOAT3 ambient;
+			float offset = 0.0;
+			
+			file >> ambient >> std::ws;
+			
+			// offset between 0 and 1, higher numbers mean brighter diffuse shading
 			if (std::isdigit(file.peek()))
 				file >> offset;
 			
-			input = new raster(pos, dir, ambient, fov, low, high, offset);
+			input = new raster(width, height, cam, ambient, offset);
 		}
 		
 		else if (!input) {
-			std::cout << "ERROR: camera undefined before adding plane to scene" << std::endl;
+			std::cout << "ERROR: scene undefined before adding objects to it" << std::endl;
 			return 0;
 		}
 		
@@ -90,6 +120,7 @@ raster* filehandler::loadfile(const char *filename) {
 			input->addShape(new cylinder(glow, ambient, diffuse, specular, shininess, pos, normal, radius));
 		}
 		
+		// add point light
 		else if (token == "pl") {
 			FLOAT3 color, pos;
 			
@@ -98,6 +129,7 @@ raster* filehandler::loadfile(const char *filename) {
 			input->addLight(new pointlight(color, pos));
 		}
 		
+		// add directional light
 		else if (token == "dl") {
 			FLOAT3 color, dir;
 			
@@ -106,8 +138,11 @@ raster* filehandler::loadfile(const char *filename) {
 			input->addLight(new directionlight(color, dir));
 		}
 		
-		// token is unrecognized
-		else if (token != "") {
+		else {
+			// token is unrecognized
+			if (cam)
+				delete cam;
+			
 			if (input)
 				delete input;
 			

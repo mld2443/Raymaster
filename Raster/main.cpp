@@ -19,28 +19,28 @@
 #define WINDOW_OFFY 100
 
 int mouseX = -1, mouseY = -1;
-int window_width = 960, window_height = 540;
+unsigned int window_width = 960, window_height = 540, antialiasing = 16;
 int window = 0;
 bool mouseLeftDown = false, mouseRightDown = false;
 
 filehandler *reader;
-raster *tracer;
+raster *raytracer;
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
+	
 	glFlush();
 	
 	unsigned int width = glutGet(GLUT_WINDOW_WIDTH), height = glutGet(GLUT_WINDOW_HEIGHT);
-
-	GLfloat *pixels = tracer->render(width, height, 16);
-
+	
+	GLfloat *pixels = raytracer->render(antialiasing);
+	
 	glDrawPixels(width, height, GL_RGB, GL_FLOAT, pixels);
 	
 	glFlush();
 	
 	delete[] pixels;
-
+	
 	glutSwapBuffers();
 }
 
@@ -57,7 +57,7 @@ void init(const char* file) {
 	glLoadIdentity();
 	
 	reader = new filehandler();
-	tracer = reader->loadfile(file);
+	raytracer = reader->loadfile(file, window_width, window_height);
 	delete reader;
 	reader = 0;
 	
@@ -74,7 +74,7 @@ void mouse(int button, int state, int x, int y) {
 			mouseRightDown = state == GLUT_DOWN;
 			break;
 	}
-
+	
 	mouseX = x;
 	mouseY = y;
 }
@@ -111,7 +111,7 @@ void key(unsigned char c, int x, int y) {
 			break;
 			
 		case 27: //escape
-			delete tracer;
+			delete raytracer;
 			
 			glutDestroyWindow(window);
 			exit(0);
@@ -123,14 +123,16 @@ void key(unsigned char c, int x, int y) {
 }
 
 int main(int argc, char** argv) {
-	if (argc != 2 && argc != 4) {
+	if (argc != 2 && argc != 4 && argc != 5) {
 		printf("expected \"%s file.scene [width height]\"\n", argv[0]);
 		return 1;
 	}
 	
-	if (argc == 4) {
+	if (argc > 2) {
 		window_width = atoi(argv[2]);
 		window_height = atoi(argv[3]);
+		if (argc == 5)
+			antialiasing = atoi(argv[4]);
 	}
 	
 	glutInit(&argc, argv);
@@ -141,7 +143,7 @@ int main(int argc, char** argv) {
 	
 	init(argv[1]);
 	
-	if (!tracer) {
+	if (!raytracer) {
 		printf("ERROR: could not load scene\n");
 		return 2;
 	}

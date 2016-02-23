@@ -19,6 +19,7 @@
 #include <math.h>
 #include <list>
 
+#include "camera.h"
 #include "plane.h"
 #include "sphere.h"
 #include "cylinder.h"
@@ -27,21 +28,17 @@
 
 class raster {
 public:
-	raster(const FLOAT3& CamPos, const FLOAT3& CamDir, const FLOAT3& globalAmbient, const float& FOV, const float& NearClip, const float& FarClip, const float& diffuseOffset);
+	raster(const unsigned int& width, const unsigned int& height, camera* c, const FLOAT3& globalAmbient, const float& diffuseOffset);
 	~raster();
 
-	void setEyePos(const FLOAT3&);
-	void setLookDir(const FLOAT3&);
-	void setFOV(const float&);
-
-	FLOAT3 getEyePos() const;
-	FLOAT3 getLookDir() const;
-	float getFOV() const;
+	camera& getCamera() const;
+	unsigned int getXRes() const;
+	unsigned int getYRes() const;
 	
 	void addShape(shape*);
 	void addLight(light*);
 	
-	GLfloat* render(const unsigned int&, const unsigned int&, const unsigned int&) const;
+	GLfloat* render(const unsigned int&) const;
 
 private:
 	void castRay(GLfloat*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const unsigned int&) const;
@@ -51,8 +48,10 @@ private:
 	std::uniform_real_distribution<float> *m_unif;
 	std::list<shape*> *m_shapes;
 	std::list<light*> *m_lights;
-	FLOAT3 m_eyePos, m_eyeDir, m_globalAmbient;
-	float m_fovX, m_lowFrustrum, m_highFrustrum, m_offset;
+	camera *m_camera;
+	FLOAT3 m_globalAmbient;
+	unsigned int m_xRes, m_yRes;
+	float m_offset;
 };
 
 #endif /* raster_h */

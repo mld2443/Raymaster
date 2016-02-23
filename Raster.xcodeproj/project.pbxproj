@@ -12,6 +12,7 @@
 		C9BC62591C7B703B008D3142 /* directionlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62571C7B703B008D3142 /* directionlight.cpp */; };
 		C9BC625C1C7B7636008D3142 /* filehandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC625A1C7B7636008D3142 /* filehandler.cpp */; };
 		C9BC625F1C7B8192008D3142 /* float3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC625E1C7B8192008D3142 /* float3.cpp */; };
+		C9BC62621C7C122A008D3142 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62601C7C122A008D3142 /* camera.cpp */; };
 		C9F9AC5A1C6845C20074A0A4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC591C6845C20074A0A4 /* main.cpp */; };
 		C9F9AC631C6845E30074A0A4 /* raster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9F9AC611C6845E30074A0A4 /* raster.cpp */; };
 		C9F9AC661C68465A0074A0A4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F9AC651C68465A0074A0A4 /* OpenGL.framework */; };
@@ -45,6 +46,8 @@
 		C9BC625B1C7B7636008D3142 /* filehandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filehandler.h; sourceTree = "<group>"; };
 		C9BC625D1C7B76D9008D3142 /* test.scene */ = {isa = PBXFileReference; lastKnownFileType = text; name = test.scene; path = Raster/test.scene; sourceTree = SOURCE_ROOT; };
 		C9BC625E1C7B8192008D3142 /* float3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float3.cpp; sourceTree = "<group>"; };
+		C9BC62601C7C122A008D3142 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
+		C9BC62611C7C122A008D3142 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		C9F9AC561C6845C20074A0A4 /* Raster */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raster; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F9AC591C6845C20074A0A4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C9F9AC601C6845D40074A0A4 /* float3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = float3.h; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 				C9F9AC591C6845C20074A0A4 /* main.cpp */,
 				C9BC625A1C7B7636008D3142 /* filehandler.cpp */,
 				C9F9AC611C6845E30074A0A4 /* raster.cpp */,
+				C9BC62601C7C122A008D3142 /* camera.cpp */,
 				C9F9AC701C6865540074A0A4 /* shape.cpp */,
 				C9F9AC6A1C6863D00074A0A4 /* plane.cpp */,
 				C9F9AC6D1C6864A30074A0A4 /* sphere.cpp */,
@@ -118,6 +122,7 @@
 			children = (
 				C9BC625B1C7B7636008D3142 /* filehandler.h */,
 				C9F9AC621C6845E30074A0A4 /* raster.h */,
+				C9BC62611C7C122A008D3142 /* camera.h */,
 				C9F9AC641C6845EC0074A0A4 /* shape.h */,
 				C9F9AC6B1C6863D00074A0A4 /* plane.h */,
 				C9F9AC6E1C6864A30074A0A4 /* sphere.h */,
@@ -196,6 +201,7 @@
 				C9F9AC5A1C6845C20074A0A4 /* main.cpp in Sources */,
 				C9F9AC751C6992DE0074A0A4 /* cylinder.cpp in Sources */,
 				C9BC62531C7B6E2A008D3142 /* light.cpp in Sources */,
+				C9BC62621C7C122A008D3142 /* camera.cpp in Sources */,
 				C9BC62561C7B6EDD008D3142 /* pointlight.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

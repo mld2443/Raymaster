@@ -7,15 +7,13 @@
 
 #include "raster.h"
 
-raster::raster(const FLOAT3& p, const FLOAT3& d, const FLOAT3& ga, const float& f, const float& low, const float& high, const float& os) {
+raster::raster(const unsigned int& x, const unsigned int& y, camera* c, const FLOAT3& ga, const float& os) {
 	m_shapes = new std::list<shape*>();
 	m_lights = new std::list<light*>();
-	m_eyePos = p;
-	m_eyeDir = d.normalize();
+	m_xRes = x;
+	m_yRes = y;
+	m_camera = c;
 	m_globalAmbient = ga;
-	m_fovX = f;
-	m_lowFrustrum = low;
-	m_highFrustrum = high;
 	m_offset = os;
 	
 	m_rng = new std::default_random_engine();
@@ -75,29 +73,16 @@ raster::~raster() {
 }
 
 
-void raster::setEyePos(const FLOAT3& p) {
-	m_eyePos = p;
+camera& raster::getCamera() const {
+	return *m_camera;
 }
 
-void raster::setLookDir(const FLOAT3& d) {
-	m_eyeDir = d;
+unsigned int raster::getXRes() const {
+	return m_xRes;
 }
 
-void raster::setFOV(const float& f) {
-	m_fovX = f;
-}
-
-
-FLOAT3 raster::getEyePos() const {
-	return m_eyePos;
-}
-
-FLOAT3 raster::getLookDir() const {
-	return m_eyeDir;
-}
-
-float raster::getFOV() const {
-	return m_fovX;
+unsigned int raster::getYRes() const {
+	return m_yRes;
 }
 
 
@@ -110,46 +95,30 @@ void raster::addLight(light *l) {
 }
 
 
-GLfloat* raster::render(const unsigned int& w, const unsigned int& h, const unsigned int& AA) const {
-	unsigned long pixindex;
-	GLfloat *pixels = new GLfloat[w * h * 3];
-	FLOAT3 vRay, hRay, rightDir, upDir, P00, P10, P01;
-	float uWidth, vHeight;
+GLfloat* raster::render(const unsigned int& AA) const {
+	unsigned long pixindex = 0;
+	GLfloat *pixels = new GLfloat[m_xRes * m_yRes * 3];
+	FLOAT3 vRay, hRay;
 	
-	pixindex = 0;
+	m_camera->updateViewport(m_xRes, m_yRes);
 	
-	FLOAT3 up{0,1,0};
+	vRay = m_camera->getP00();
 	
-	rightDir = m_eyeDir.cross(up).normalize();
-	upDir = rightDir.cross(m_eyeDir).normalize();
-	
-	uWidth = tanf((m_fovX / 2) * (M_PI / 180));
-	vHeight = ((float)h / (float)w) * uWidth;
-	
-	P00 = m_eyePos + m_eyeDir - (rightDir * uWidth) - (upDir * vHeight);
-	P10 = m_eyePos + m_eyeDir + (rightDir * uWidth) - (upDir * vHeight);
-	P01 = m_eyePos + m_eyeDir - (rightDir * uWidth) + (upDir * vHeight);
-	
-	rightDir = (P10 - P00) / w;
-	upDir = (P01 - P00) / h;
-	
-	vRay = P00;
-	
-	for (int j = 0; j < h; ++j) {
+	for (int j = 0; j < m_yRes; ++j) {
 		hRay = vRay;
-		for (int i = 0; i < w; ++i) {
+		for (int i = 0; i < m_xRes; ++i) {
 			// background color
 			pixels[pixindex] = 0.0;
 			pixels[pixindex+1] = 0.0;
 			pixels[pixindex+2] = 0.0;
 			
-			castRay(pixels + pixindex, hRay, rightDir, upDir, AA);
+			castRay(pixels + pixindex, hRay, m_camera->getDeltaX(), m_camera->getDeltaY(), AA);
 			
 			// increments
-			hRay += rightDir;
+			hRay += m_camera->getDeltaX();
 			pixindex += 3;
 		}
-		vRay += upDir;
+		vRay += m_camera->getDeltaY();
 	}
 	
 	return pixels;
@@ -164,16 +133,16 @@ void raster::castRay(GLfloat *pixel, const FLOAT3& orig, const FLOAT3& uInc, con
 		r1 = (*m_unif)(*m_rng), r2 = (*m_unif)(*m_rng);
 		
 		sample = orig + (vInc * r1) + (uInc * r2);
-		ray = (sample - m_eyePos).normalize();
+		ray = (sample - m_camera->getPos()).normalize();
 		
-		zValue = m_highFrustrum;
+		zValue = m_camera->getHighFrust();
 		color = {0.0, 0.0, 0.0};
 		
 		for (shape *s : *m_shapes) {
-			float intersect = s->intersectRay(m_eyePos, ray);
-			if (intersect > m_lowFrustrum && intersect < zValue) {
+			float intersect = s->intersectRay(m_camera->getPos(), ray);
+			if (intersect > m_camera->getLowFrust() && intersect < zValue) {
 				zValue = intersect;
-				color = getColor(s, m_eyePos + (ray * intersect), -ray);
+				color = getColor(s, m_camera->getPos() + (ray * intersect), -ray);
 			}
 		}
 		
