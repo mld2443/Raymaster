@@ -33,8 +33,7 @@ raster* filehandler::loadfile(const char *filename) {
 		
 		// comment lines
 		if (token[0] == '#') {
-			std::string dummy;
-			getline(file, dummy);
+			getline(file, token);
 		}
 		
 		// define a camera
@@ -108,13 +107,15 @@ raster* filehandler::loadfile(const char *filename) {
 		}
 		
 		// token is unrecognized
-		else {
+		else if (token != "") {
 			if (input)
 				delete input;
 			
 			std::cout << "ERROR: unrecognized symbol: " << token << std::endl;
 			return 0;
 		}
+		
+		token.clear();
 	}
 	
 	return input;

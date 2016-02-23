@@ -188,7 +188,7 @@ void raster::castRay(GLfloat *pixel, const FLOAT3& orig, const FLOAT3& uInc, con
 }
 
 FLOAT3 raster::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye) const {
-	FLOAT3 glow, ambient, diffuse, specular;
+	FLOAT3 glow, ambient, diffuse = {}, specular = {};
 	
 	glow = s->getGlow();
 	
@@ -198,9 +198,13 @@ FLOAT3 raster::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 		float product = s->getNormal(point).dot(l->normalToLight(point));
 		float offsetProduct = (product + m_offset)/(1 + m_offset);
 		
-		diffuse = s->getDiffuse() * l->getColor() * std::max((float)offsetProduct, (float)0.0);
-	
-		specular = {};
+		diffuse += s->getDiffuse() * l->getColor() * std::max(offsetProduct, 0.0f);
+		
+		if (product > 0.0) {
+			FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();
+			float value = (s->getNormal(point)).dot(halfway);
+			specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
+		}
 	}
 	
 	return glow + ambient + diffuse + specular;
