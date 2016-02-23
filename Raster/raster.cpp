@@ -27,6 +27,9 @@ raster::~raster() {
 	delete m_unif;
 	m_unif = 0;
 	
+	delete m_camera;
+	m_camera = 0;
+	
 	for (shape *s : *m_shapes) {
 		switch (s->getType()) {
 			case shape::plane:
@@ -108,9 +111,9 @@ GLfloat* raster::render(const unsigned int& AA) const {
 		hRay = vRay;
 		for (int i = 0; i < m_xRes; ++i) {
 			// background color
-			pixels[pixindex] = 0.0;
-			pixels[pixindex+1] = 0.0;
-			pixels[pixindex+2] = 0.0;
+			pixels[pixindex] = 0.0f;
+			pixels[pixindex+1] = 0.0f;
+			pixels[pixindex+2] = 0.0f;
 			
 			castRay(pixels + pixindex, hRay, m_camera->getDeltaX(), m_camera->getDeltaY(), AA);
 			
@@ -136,7 +139,7 @@ void raster::castRay(GLfloat *pixel, const FLOAT3& orig, const FLOAT3& uInc, con
 		ray = (sample - m_camera->getPos()).normalize();
 		
 		zValue = m_camera->getHighFrust();
-		color = {0.0, 0.0, 0.0};
+		color = {0.0f, 0.0f, 0.0f};
 		
 		for (shape *s : *m_shapes) {
 			float intersect = s->intersectRay(m_camera->getPos(), ray);
@@ -163,18 +166,18 @@ FLOAT3 raster::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 	
 	ambient = m_globalAmbient * s->getAmbient();
 	
-	for (light *l : *m_lights) {
+	/*for (light *l : *m_lights) {
 		float product = s->getNormal(point).dot(l->normalToLight(point));
-		float offsetProduct = (product + m_offset)/(1 + m_offset);
+		float diffuseOffset = (product + m_offset)/(1 + m_offset);
 		
-		diffuse += s->getDiffuse() * l->getColor() * std::max(offsetProduct, 0.0f);
+		diffuse += s->getDiffuse() * l->getColor() * std::max(diffuseOffset, 0.0f);
 		
-		if (product > 0.0) {
+		if (product > 0.0f) {
 			FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();
 			float value = (s->getNormal(point)).dot(halfway);
 			specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
 		}
-	}
+	}*/
 	
 	return glow + ambient + diffuse + specular;
 }

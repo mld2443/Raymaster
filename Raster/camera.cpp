@@ -38,14 +38,14 @@ camera::~camera() {
 	delete m_upDir;
 	m_upDir = 0;
 	
-	delete m_P00;
-	delete m_P10;
-	delete m_P01;
-	delete m_P11;
+	if (m_P00) delete m_P00;
+	if (m_P10) delete m_P10;
+	if (m_P01) delete m_P01;
+	if (m_P11) delete m_P11;
 	m_P00 = m_P10 = m_P01 = m_P11 = 0;
 	
-	delete m_deltaX;
-	delete m_deltaY;
+	if (m_deltaX) delete m_deltaX;
+	if (m_deltaY) delete m_deltaY;
 	m_deltaX = m_deltaY = 0;
 }
 
@@ -102,6 +102,9 @@ float camera::getHighFrust() const{
 void camera::updateViewport(const unsigned int w, const unsigned int h) {
 	float uWidth, vHeight;
 	
+	uWidth = tanf((*m_xFOV / 2) * (M_PI / 180));
+	vHeight = ((float)h / (float)w) * uWidth;
+	
 	if (m_deltaX || m_deltaY) {
 		delete m_deltaX;
 		delete m_deltaY;
@@ -109,9 +112,6 @@ void camera::updateViewport(const unsigned int w, const unsigned int h) {
 	
 	m_deltaX = new FLOAT3(m_lookDir->cross(*m_upDir).normalize());
 	m_deltaY = new FLOAT3(m_deltaX->cross(*m_lookDir).normalize());
-	
-	uWidth = tanf((*m_xFOV / 2) * (M_PI / 180));
-	vHeight = ((float)h / (float)w) * uWidth;
 	
 	if (m_P00 || m_P10 || m_P01 || m_P11) {
 		delete m_P00;
