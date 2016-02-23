@@ -24,3 +24,8 @@ pointlight::~pointlight() {
 light::lighttype pointlight::getType() const {
 	return point;
 }
+
+
+FLOAT3 pointlight::normalToLight(const FLOAT3& p) const {
+	return (*m_pos - p).normalize();
+}

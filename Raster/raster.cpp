@@ -7,13 +7,16 @@
 
 #include "raster.h"
 
-raster::raster(const FLOAT3& p, const FLOAT3& d, const float& f, const float& low, const float& high) {
+raster::raster(const FLOAT3& p, const FLOAT3& d, const FLOAT3& ga, const float& f, const float& low, const float& high, const float& os) {
 	m_shapes = new std::list<shape*>();
+	m_lights = new std::list<light*>();
 	m_eyePos = p;
 	m_eyeDir = d.normalize();
+	m_globalAmbient = ga;
 	m_fovX = f;
 	m_lowFrustrum = low;
 	m_highFrustrum = high;
+	m_offset = os;
 	
 	m_rng = new std::default_random_engine();
 	m_unif = new std::uniform_real_distribution<float>(0, 1);
@@ -49,6 +52,26 @@ raster::~raster() {
 	m_shapes->clear();
 	delete m_shapes;
 	m_shapes = 0;
+	
+	for (light *l : *m_lights) {
+		switch (l->getType()) {
+			case light::point:
+				delete (pointlight*)l;
+				break;
+				
+			case light::directional:
+				delete (directionlight*)l;
+				break;
+				
+			default:
+				break;
+		}
+		l = 0;
+	}
+	
+	m_lights->clear();
+	delete m_lights;
+	m_lights = 0;
 }
 
 
@@ -150,7 +173,7 @@ void raster::castRay(GLfloat *pixel, const FLOAT3& orig, const FLOAT3& uInc, con
 			float intersect = s->intersectRay(m_eyePos, ray);
 			if (intersect > m_lowFrustrum && intersect < zValue) {
 				zValue = intersect;
-				color = s->getColor();
+				color = getColor(s, m_eyePos + (ray * intersect), -ray);
 			}
 		}
 		
@@ -162,4 +185,23 @@ void raster::castRay(GLfloat *pixel, const FLOAT3& orig, const FLOAT3& uInc, con
 	pixel[0] /= float(AA);
 	pixel[1] /= float(AA);
 	pixel[2] /= float(AA);
+}
+
+FLOAT3 raster::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye) const {
+	FLOAT3 glow, ambient, diffuse, specular;
+	
+	glow = s->getGlow();
+	
+	ambient = m_globalAmbient * s->getAmbient();
+	
+	for (light *l : *m_lights) {
+		float product = s->getNormal(point).dot(l->normalToLight(point));
+		float offsetProduct = (product + m_offset)/(1 + m_offset);
+		
+		diffuse = s->getDiffuse() * l->getColor() * std::max((float)offsetProduct, (float)0.0);
+	
+		specular = {};
+	}
+	
+	return glow + ambient + diffuse + specular;
 }

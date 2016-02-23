@@ -13,9 +13,13 @@
 
 struct FLOAT3 {
 	float x,y,z;
+	
+	FLOAT3(const float _x=0.0, const float _y=0.0, const float _z=0.0): x(_x), y(_y), z(_z) {}
 
 	FLOAT3 operator+(const FLOAT3& v) const { return {x + v.x, y + v.y, z + v.z}; }
 	FLOAT3 operator-(const FLOAT3& v) const { return {x - v.x, y - v.y, z - v.z}; }
+	FLOAT3 operator*(const FLOAT3& v) const { return {x * v.x, y * v.y, z * v.z}; }
+	FLOAT3 operator/(const FLOAT3& v) const { return {x / v.x, y / v.y, z / v.z}; }
 	FLOAT3 operator*(const float d) const { return {x * d, y * d, z * d}; }
 	FLOAT3 operator/(const float d) const { return {x / d, y / d, z / d}; }
 	FLOAT3& operator+=(const FLOAT3& v) { x += v.x; y += v.y; z += v.z; return *this; }

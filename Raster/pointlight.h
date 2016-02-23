@@ -16,6 +16,8 @@ public:
 	~pointlight();
 	
 	lighttype getType() const;
+	
+	FLOAT3 normalToLight(const FLOAT3&) const;
 };
 
 #endif /* pointlight_h */

@@ -14,14 +14,14 @@
 
 class cylinder : public shape {
 public:
-	cylinder(const FLOAT3& color, const FLOAT3& position, const FLOAT3& direction, const float& radius);
+	cylinder(const FLOAT3& glowColor, const FLOAT3& ambientColor, const FLOAT3& diffuseColor, const FLOAT3& specularColor, const float& shininess, const FLOAT3& position, const FLOAT3& direction, const float& radius);
 	~cylinder();
 	
 	shapetype getType() const;
 	
-	float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const;
+	FLOAT3 getNormal(const FLOAT3& point) const;
 	
-private:
+	float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const;
 };
 
 #endif /* cylinder_h */

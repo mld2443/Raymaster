@@ -16,6 +16,8 @@ public:
 	~directionlight();
 	
 	lighttype getType() const;
+	
+	FLOAT3 normalToLight(const FLOAT3&) const;
 };
 
 #endif /* directionlight_h */

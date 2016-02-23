@@ -33,7 +33,8 @@ raster* filehandler::loadfile(const char *filename) {
 		
 		// comment lines
 		if (token[0] == '#') {
-			getline(file, token);
+			std::string dummy;
+			getline(file, dummy);
 		}
 		
 		// define a camera
@@ -44,12 +45,15 @@ raster* filehandler::loadfile(const char *filename) {
 				return 0;
 			}
 			
-			FLOAT3 pos, dir;
-			float fov, low, high;
+			FLOAT3 pos, dir, ambient;
+			float fov, low, high, offset = 0.0;
 			
-			file >> pos >> dir >> fov >> low >> high;
+			file >> pos >> dir >> ambient >> fov >> low >> high >> std::ws;
 			
-			input = new raster(pos, dir, fov, low, high);
+			if (std::isdigit(file.peek()))
+				file >> offset;
+			
+			input = new raster(pos, dir, ambient, fov, low, high, offset);
 		}
 		
 		else if (!input) {
@@ -59,31 +63,32 @@ raster* filehandler::loadfile(const char *filename) {
 		
 		// add a new plane
 		else if (token == "p") {
-			FLOAT3 color, pos, normal;
+			FLOAT3 glow, ambient, diffuse, specular, pos, normal;
+			float shininess;
 			
-			file >> color >> pos >> normal;
+			file >> glow >> ambient >> diffuse >> specular >> shininess >> pos >> normal;
 			
-			input->addShape(new plane(color, pos, normal));
+			input->addShape(new plane(glow, ambient, diffuse, specular, shininess, pos, normal));
 		}
 		
 		// add a new sphere
 		else if (token == "s") {
-			FLOAT3 color, pos;
-			float radius;
+			FLOAT3 glow, ambient, diffuse, specular, pos;
+			float radius, shininess;
 			
-			file >> color >> pos >> radius;
+			file >> glow >> ambient >> diffuse >> specular >> shininess >> pos >> radius;
 			
-			input->addShape(new sphere(color, pos, radius));
+			input->addShape(new sphere(glow, ambient, diffuse, specular, shininess, pos, radius));
 		}
 		
 		// add a new sphere
 		else if (token == "q") {
-			FLOAT3 color, pos, normal;
-			float radius;
+			FLOAT3 glow, ambient, diffuse, specular, pos, normal;
+			float radius, shininess;
 			
-			file >> color >> pos >> normal >> radius;
+			file >> glow >> ambient >> diffuse >> specular >> shininess >> pos >> normal >> radius;
 			
-			input->addShape(new cylinder(color, pos, normal, radius));
+			input->addShape(new cylinder(glow, ambient, diffuse, specular, shininess, pos, normal, radius));
 		}
 		
 		else if (token == "pl") {

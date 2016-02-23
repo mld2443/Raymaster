@@ -9,7 +9,7 @@
 
 directionlight::directionlight(const FLOAT3& c, const FLOAT3& d) {
 	m_color = new FLOAT3(c);
-	m_pos = new FLOAT3(d);
+	m_pos = new FLOAT3(d.normalize());
 }
 
 directionlight::~directionlight() {
@@ -23,4 +23,9 @@ directionlight::~directionlight() {
 
 light::lighttype directionlight::getType() const {
 	return directional;
+}
+
+
+FLOAT3 directionlight::normalToLight(const FLOAT3& p) const {
+	return -(*m_pos);
 }
