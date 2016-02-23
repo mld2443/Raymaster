@@ -166,7 +166,7 @@ FLOAT3 raster::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 	
 	ambient = m_globalAmbient * s->getAmbient();
 	
-	/*for (light *l : *m_lights) {
+	for (light *l : *m_lights) {
 		float product = s->getNormal(point).dot(l->normalToLight(point));
 		float diffuseOffset = (product + m_offset)/(1 + m_offset);
 		
@@ -177,7 +177,7 @@ FLOAT3 raster::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 			float value = (s->getNormal(point)).dot(halfway);
 			specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
 		}
-	}*/
+	}
 	
 	return glow + ambient + diffuse + specular;
 }

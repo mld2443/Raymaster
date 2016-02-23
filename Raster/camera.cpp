@@ -9,7 +9,7 @@
 
 camera::camera(const FLOAT3& p, const FLOAT3& d, const float& f, const float& l, const float& h, const FLOAT3& u) {
 	m_pos = new FLOAT3(p);
-	m_lookDir = new FLOAT3(d);
+	m_lookDir = new FLOAT3(d.normalize());
 	m_xFOV = new float(f);
 	m_lowFrustrum = new float(l);
 	m_highFrustrum = new float(h);
