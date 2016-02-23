@@ -51,7 +51,7 @@ shape::shapetype cylinder::getType() const {
 
 
 FLOAT3 cylinder::getNormal(const FLOAT3 &p) const {
-	return {};
+	return ((m_dir->cross(p - *m_pos)).cross(*m_dir)).normalize();
 }
 
 
