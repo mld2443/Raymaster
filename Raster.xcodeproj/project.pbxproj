@@ -44,7 +44,6 @@
 		C9BC62581C7B703B008D3142 /* directionlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = directionlight.h; sourceTree = "<group>"; };
 		C9BC625A1C7B7636008D3142 /* filehandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filehandler.cpp; sourceTree = "<group>"; };
 		C9BC625B1C7B7636008D3142 /* filehandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filehandler.h; sourceTree = "<group>"; };
-		C9BC625D1C7B76D9008D3142 /* test.scene */ = {isa = PBXFileReference; lastKnownFileType = text; name = test.scene; path = Raster/test.scene; sourceTree = SOURCE_ROOT; };
 		C9BC625E1C7B8192008D3142 /* float3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float3.cpp; sourceTree = "<group>"; };
 		C9BC62601C7C122A008D3142 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		C9BC62611C7C122A008D3142 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
@@ -99,7 +98,6 @@
 		C9F9AC581C6845C20074A0A4 /* Raster */ = {
 			isa = PBXGroup;
 			children = (
-				C9BC625D1C7B76D9008D3142 /* test.scene */,
 				C9F9AC591C6845C20074A0A4 /* main.cpp */,
 				C9BC625A1C7B7636008D3142 /* filehandler.cpp */,
 				C9F9AC611C6845E30074A0A4 /* raster.cpp */,
