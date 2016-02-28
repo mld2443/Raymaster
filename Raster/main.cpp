@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
 	glutInitWindowSize(window_width, window_height);
 	glutInitWindowPosition(WINDOW_OFFX, WINDOW_OFFY);
-	window = glutCreateWindow("CPSC 647 HW2");
+	window = glutCreateWindow("Raymaster 5000");
 	
 	init(argv[1]);
 	

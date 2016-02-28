@@ -9,3 +9,7 @@ TODO List:
 2. Add in general quadrics.
 3. Clean up naming conventions.
 4. Document all of the code, not just the critical parts.
+5. Rewrite filehandler and convert scenes to xml
+6. Add finite shapes
+7. Add unions and subtractions
+8. Add subdivision surfaces

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C9A8AF031C8397A200CBCA09 /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = C9A8AF021C8397A200CBCA09 /* readme.md */; };
 		C9BC62531C7B6E2A008D3142 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62511C7B6E2A008D3142 /* light.cpp */; };
 		C9BC62561C7B6EDD008D3142 /* pointlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62541C7B6EDD008D3142 /* pointlight.cpp */; };
 		C9BC62591C7B703B008D3142 /* directionlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62571C7B703B008D3142 /* directionlight.cpp */; };
@@ -36,6 +37,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C9A8AF001C8396B900CBCA09 /* example.scene */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example.scene; sourceTree = SOURCE_ROOT; };
+		C9A8AF011C83979000CBCA09 /* flowers.scene */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = flowers.scene; sourceTree = SOURCE_ROOT; };
+		C9A8AF021C8397A200CBCA09 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
 		C9BC62511C7B6E2A008D3142 /* light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		C9BC62521C7B6E2A008D3142 /* light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
 		C9BC62541C7B6EDD008D3142 /* pointlight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pointlight.cpp; sourceTree = "<group>"; };
@@ -98,6 +102,9 @@
 		C9F9AC581C6845C20074A0A4 /* Raster */ = {
 			isa = PBXGroup;
 			children = (
+				C9A8AF021C8397A200CBCA09 /* readme.md */,
+				C9A8AF011C83979000CBCA09 /* flowers.scene */,
+				C9A8AF001C8396B900CBCA09 /* example.scene */,
 				C9F9AC591C6845C20074A0A4 /* main.cpp */,
 				C9BC625A1C7B7636008D3142 /* filehandler.cpp */,
 				C9F9AC611C6845E30074A0A4 /* raster.cpp */,
@@ -192,6 +199,7 @@
 				C9BC625F1C7B8192008D3142 /* float3.cpp in Sources */,
 				C9BC62591C7B703B008D3142 /* directionlight.cpp in Sources */,
 				C9F9AC721C6865540074A0A4 /* shape.cpp in Sources */,
+				C9A8AF031C8397A200CBCA09 /* readme.md in Sources */,
 				C9BC625C1C7B7636008D3142 /* filehandler.cpp in Sources */,
 				C9F9AC6F1C6864A30074A0A4 /* sphere.cpp in Sources */,
 				C9F9AC6C1C6863D00074A0A4 /* plane.cpp in Sources */,

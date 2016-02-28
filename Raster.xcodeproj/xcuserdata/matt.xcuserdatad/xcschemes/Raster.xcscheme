@@ -47,7 +47,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/matt/Developer/Raster/Raster"
+      customWorkingDirectory = "/Users/matt/Developer/Raster"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -65,15 +65,19 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "example.scene"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "flowers.scene"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "1280 720"
+            argument = "1024 768"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "4"
-            isEnabled = "YES">
+            argument = "1"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
