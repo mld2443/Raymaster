@@ -18,6 +18,9 @@ public:
 	lighttype getType() const;
 	
 	FLOAT3 normalToLight(const FLOAT3&) const;
+	
+private:
+	FLOAT3 *m_position;
 };
 
 #endif /* pointlight_h */

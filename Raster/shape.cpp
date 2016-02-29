@@ -7,34 +7,26 @@
 
 #include "shape.h"
 
-FLOAT3 shape::getGlow() const {
-	return *m_glow;
-}
-
 FLOAT3 shape::getAmbient() const {
-	return *m_ambient;
+	return m_colors->getAmbient();
 }
 
 FLOAT3 shape::getDiffuse() const {
-	return *m_diffuse;
+	return m_colors->getDiffuse();
 }
 
 FLOAT3 shape::getSpecular() const {
-	return *m_specular;
+	return m_colors->getSpecular();
 }
 
 float shape::getShininess() const {
-	return *m_shininess;
+	return m_colors->getShininess();
+}
+
+FLOAT3 shape::getGlow() const {
+	return m_colors->getGlow();
 }
 
 FLOAT3 shape::getPos() const {
 	return *m_pos;
-}
-
-FLOAT3 shape::getDir() const {
-	return *m_dir;
-}
-
-float shape::getRadius() const {
-	return *m_radius;
 }

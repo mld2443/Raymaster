@@ -7,17 +7,17 @@
 
 #include "directionlight.h"
 
-directionlight::directionlight(const FLOAT3& c, const FLOAT3& d) {
+directionlight::directionlight(const FLOAT3& c, const FLOAT3& n) {
 	m_color = new FLOAT3(c);
-	m_pos = new FLOAT3(d.normalize());
+	m_normal = new FLOAT3(n.normalize());
 }
 
 directionlight::~directionlight() {
 	delete m_color;
-	m_color = 0;
+	delete m_normal;
 	
-	delete m_pos;
-	m_pos = 0;
+	m_color = 0;
+	m_normal = 0;
 }
 
 
@@ -27,5 +27,5 @@ light::lighttype directionlight::getType() const {
 
 
 FLOAT3 directionlight::normalToLight(const FLOAT3& p) const {
-	return -(*m_pos);
+	return -(*m_normal);
 }

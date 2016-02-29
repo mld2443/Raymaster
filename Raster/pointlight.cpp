@@ -9,15 +9,15 @@
 
 pointlight::pointlight(const FLOAT3& c, const FLOAT3& p) {
 	m_color = new FLOAT3(c);
-	m_pos = new FLOAT3(p);
+	m_position = new FLOAT3(p);
 }
 
 pointlight::~pointlight() {
 	delete m_color;
-	m_color = 0;
+	delete m_position;
 	
-	delete m_pos;
-	m_pos = 0;
+	m_color = 0;
+	m_position = 0;
 }
 
 
@@ -27,5 +27,5 @@ light::lighttype pointlight::getType() const {
 
 
 FLOAT3 pointlight::normalToLight(const FLOAT3& p) const {
-	return (*m_pos - p).normalize();
+	return (*m_position - p).normalize();
 }

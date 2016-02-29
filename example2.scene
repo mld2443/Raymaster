@@ -1,0 +1,94 @@
+##################
+#
+# example2.scene
+# Matthew Dillard
+# 2/28/16
+#
+##################
+
+# camera
+#c (30,10,-8) (-60,-10,8) 70 2 10000
+
+# Scene details
+scene
+ambient (0.1,0.1,0.1)
+offset 0.5
+
+# lights
+pointlight
+color (0.1,0.1,0.8)
+position (0,40,10)
+
+pointlight
+color (0.1,0.5,0.1)
+position (70,-40,10)
+
+directlight
+color (0.5,0.1,0.1)
+normal (-20,10,50)
+
+# Colors
+color yellow
+ambient (0.5,0.5,0.1)
+diffuse (1.0,1.0,0.0)
+specular (1.0,1.0,0.0)
+shininess 5.0
+glow (0.0,0.0,0.0)
+
+color purple
+ambient (0.04,0.0,0.06)
+diffuse (0.2,0.0,0.3)
+specular (0.6,0.3,0.8)
+shine 100.0
+glow (0.0,0.0,0.0)
+
+color grey
+ambient (0.3,0.3,0.4)
+diffuse (0.9,0.9,1.0)
+specular (0.9,0.9,1.0)
+shine 30.0
+glow (0.1,0.1,0.1)
+
+color unknown
+ambient (0.1,0.05,0.02)
+diffuse (0.5,0.2,0.1)
+specular (0.5,0.2,0.1)
+shine 20.0
+
+quadric
+color purple
+position (-20,0,20)
+equation (1,1,-1,0,0,0,0,0,0,-1)
+
+# Planes
+plane
+color yellow
+position (-60,0,0)
+normal (1,0,0)
+
+# Cylinders
+cylinder
+color purple
+position (-30,0,0)
+#rotation (1,2,1)
+radius 5
+
+# Spheres
+sphere
+color grey
+position (-30.0,0.0,0.0)
+radius 11.0
+
+sphere
+color unknown
+position (-30.0,7.0,0.0)
+radius 10.0
+
+#s (0.0,0.0,0.0) (0.05,0.1,0.12) (0.2,0.5,0.6) (0.2,0.5,0.6) 100.0 (-30.0,-7.0,0.0) 10.0
+#s (0.0,0.0,0.0) (0.0,0.1,0.0) (0.0,0.5,0.0) (0.0,0.5,0.0) 20.0 (-30.0,3.0,5.0) 10.0
+#s (0.0,0.0,0.0) (0.08,0.16,0.0) (0.4,0.8,0.0) (0.4,0.8,0.0) 20.0 (-30.0,-3.0,5.0) 10.0
+#s (0.0,0.0,0.0) (0.04,0.02,0.14) (0.2,0.1,0.7) (0.2,0.1,0.7) 20.0 (-30.0,-3.0,-5.0) 10.0
+#s (0.0,0.0,0.0) (0.18,0.08,0.0) (0.9,0.4,0.0) (0.9,0.4,0.0) 20.0 (-30.0,3.0,-5.0) 10.0
+
+#s (0.0,0.0,0.0) (0.16,0.16,0.16) (0.5,0.8,0.8) (0.5,0.8,0.8) 100.0 (-40.0,20.0,-30.0) 10.0
+#s (0.0,0.0,0.0) (0.16,0.16,0.16) (0.8,0.8,0.5) (0.8,0.8,0.5) 100.0 (-40.0,-20.0,30.0) 10.0

@@ -10,18 +10,16 @@
 
 #include <math.h>
 
-#include "shape.h"
+#include "quadric.h"
 
-class cylinder : public shape {
+class cylinder : public quadric {
 public:
-	cylinder(const FLOAT3& glowColor, const FLOAT3& ambientColor, const FLOAT3& diffuseColor, const FLOAT3& specularColor, const float& shininess, const FLOAT3& position, const FLOAT3& direction, const float& radius);
+	cylinder(const colordata& colors,
+			 const FLOAT3& pos,
+			 const float& radius);
 	~cylinder();
 	
 	shapetype getType() const;
-	
-	FLOAT3 getNormal(const FLOAT3& point) const;
-	
-	float intersectRay(const FLOAT3& cam_pos, const FLOAT3& ray) const;
 };
 
 #endif /* cylinder_h */

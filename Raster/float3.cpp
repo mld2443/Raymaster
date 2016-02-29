@@ -9,6 +9,11 @@
 
 #include "float3.h"
 
+FLOAT3 operator*(const float& f, const FLOAT3& f3) {
+	return {f * f3.x, f * f3.y, f * f3.z};
+}
+
+
 std::istream& operator>>(std::istream& is, FLOAT3& f) {
 	std::string s;
 	std::stringstream ss;
@@ -27,7 +32,7 @@ std::istream& operator>>(std::istream& is, FLOAT3& f) {
 	return is;
 }
 
-std::ostream& operator<<(std::ostream& os, FLOAT3& f) {
+std::ostream& operator<<(std::ostream& os, const FLOAT3& f) {
 	os << '(' << f.x << ',' << f.y << ',' << f.z << ')';
 	return os;
 }

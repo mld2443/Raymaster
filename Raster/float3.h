@@ -20,22 +20,28 @@ struct FLOAT3 {
 	FLOAT3 operator-(const FLOAT3& v) const { return {x - v.x, y - v.y, z - v.z}; }
 	FLOAT3 operator*(const FLOAT3& v) const { return {x * v.x, y * v.y, z * v.z}; }
 	FLOAT3 operator/(const FLOAT3& v) const { return {x / v.x, y / v.y, z / v.z}; }
-	FLOAT3 operator*(const float d) const { return {x * d, y * d, z * d}; }
-	FLOAT3 operator/(const float d) const { return {x / d, y / d, z / d}; }
+	FLOAT3 operator*(const float f) const { return {x * f, y * f, z * f}; }
+	FLOAT3 operator/(const float f) const { return {x / f, y / f, z / f}; }
+	FLOAT3 operator-() const { return {-x, -y, -z}; }
+	
 	FLOAT3& operator+=(const FLOAT3& v) { x += v.x; y += v.y; z += v.z; return *this; }
 	FLOAT3& operator-=(const FLOAT3& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
-	FLOAT3& operator*=(const float d) { x *= d; y *= d; z *= d; return *this; }
-	FLOAT3& operator/=(const float d) { x /= d; y /= d; z /= d; return *this; }
-	FLOAT3 operator-() const { return {-x, -y, -z}; }
+	FLOAT3& operator*=(const float f) { x *= f; y *= f; z *= f; return *this; }
+	FLOAT3& operator/=(const float f) { x /= f; y /= f; z /= f; return *this; }
 	FLOAT3& operator=(const FLOAT3& v) { x = v.x; y = v.y; z = v.z; return *this; }
+	
+	bool operator==(const FLOAT3& c) const { return (x == c.x && y == c.y && z == c.z); }
+	bool operator!=(const FLOAT3& c) const { return (x != c.x || y != c.y || z != c.z); }
 
-	float abs() const { return sqrt(x*x + y*y + z*z); }
+	float len() const { return sqrt(x*x + y*y + z*z); }
 	float dot(const FLOAT3& v) const { return x*v.x + y*v.y + z*v.z; }
 	FLOAT3 cross(const FLOAT3& v) const { return {y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x}; }
-	FLOAT3 normalize() const { float mag = abs(); return {x/mag, y/mag, z/mag}; }
+	FLOAT3 normalize() const { float mag = len(); return {x/mag, y/mag, z/mag}; }
+	
+	friend FLOAT3 operator*(const float&, const FLOAT3&);
 	
 	friend std::istream& operator>>(std::istream&, FLOAT3&);
-	friend std::ostream& operator<<(std::ostream&, FLOAT3&);
+	friend std::ostream& operator<<(std::ostream&, const FLOAT3&);
 };
 
 #endif /* float3_h */

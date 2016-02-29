@@ -20,7 +20,7 @@ public:
 	virtual FLOAT3 normalToLight(const FLOAT3&) const =0;
 	
 protected:
-	FLOAT3 *m_color, *m_pos;
+	FLOAT3 *m_color;
 };
 
 #endif /* light_h */

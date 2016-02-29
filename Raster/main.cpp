@@ -11,20 +11,20 @@
 #else
 	#include <GL/glut.h>
 #endif
-#include <iostream>
 
-#include "filehandler.h"
+#include "scene.h"
+#include "camera.h"
 
 #define WINDOW_OFFX 100
 #define WINDOW_OFFY 100
 
 int mouseX = -1, mouseY = -1;
-unsigned int window_width = 960, window_height = 540, antialiasing = 16;
+unsigned int window_width = 1280, window_height = 720;
 int window = 0;
 bool mouseLeftDown = false, mouseRightDown = false;
 
-filehandler *reader;
-raster *raytracer;
+scene *example;
+camera *tracer;
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -33,7 +33,7 @@ void display() {
 	
 	unsigned int width = glutGet(GLUT_WINDOW_WIDTH), height = glutGet(GLUT_WINDOW_HEIGHT);
 	
-	GLfloat *pixels = raytracer->render(antialiasing);
+	GLfloat *pixels = tracer->capture(example);
 	
 	glDrawPixels(width, height, GL_RGB, GL_FLOAT, pixels);
 	
@@ -44,7 +44,7 @@ void display() {
 	glutSwapBuffers();
 }
 
-void init(const char* file) {
+void init() {
 	/* select clearing color 	*/
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glDisable(GL_DEPTH_TEST);
@@ -55,11 +55,6 @@ void init(const char* file) {
 	gluOrtho2D(0, glutGet(GLUT_WINDOW_WIDTH) - 1, glutGet(GLUT_WINDOW_HEIGHT) - 1, 0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
-	reader = new filehandler();
-	raytracer = reader->loadfile(file, window_width, window_height);
-	delete reader;
-	reader = 0;
 	
 	glutPostRedisplay();
 }
@@ -111,7 +106,7 @@ void key(unsigned char c, int x, int y) {
 			break;
 			
 		case 27: //escape
-			delete raytracer;
+			delete tracer;
 			
 			glutDestroyWindow(window);
 			exit(0);
@@ -128,11 +123,18 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	
-	if (argc > 2) {
+	if (argc == 4) {
 		window_width = atoi(argv[2]);
 		window_height = atoi(argv[3]);
-		if (argc == 5)
-			antialiasing = atoi(argv[4]);
+	}
+	
+	try {
+		example = new scene(argv[1]);
+		tracer = new camera(1280, 720, {30,10,-8}, {-60,-10,8}, 90, 2, 10000, 4);
+	}
+	catch(std::exception e){
+		printf("%s", e.what());
+		return 1;
 	}
 	
 	glutInit(&argc, argv);
@@ -141,12 +143,7 @@ int main(int argc, char** argv) {
 	glutInitWindowPosition(WINDOW_OFFX, WINDOW_OFFY);
 	window = glutCreateWindow("Raymaster 5000");
 	
-	init(argv[1]);
-	
-	if (!raytracer) {
-		printf("ERROR: could not load scene\n");
-		return 2;
-	}
+	init();
 	
 	glutReshapeFunc (reshape);
 	glutDisplayFunc(display);
