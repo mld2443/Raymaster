@@ -65,10 +65,6 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "example.scene"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "example2.scene"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

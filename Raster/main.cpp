@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
 	
 	try {
 		example = new scene(argv[1]);
-		tracer = new camera(window_width, window_height, {30,10,-8}, {-60,-10,8}, 90, 2, 10000, 4);
+		tracer = new camera(window_width, window_height, {30,10,-8}, {-60,-10,8}, 70, 2, 10000, 16);
 	}
 	catch(const std::exception& e){
         std::cout << "Exception occured: " << e.what() << std::endl;

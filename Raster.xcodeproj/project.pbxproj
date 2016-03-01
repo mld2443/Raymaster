@@ -41,7 +41,6 @@
 		C9A8AF011C83979000CBCA09 /* flowers.scene */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = flowers.scene; sourceTree = SOURCE_ROOT; };
 		C9A8AF041C83C13D00CBCA09 /* quadric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = quadric.cpp; sourceTree = "<group>"; };
 		C9A8AF051C83C13D00CBCA09 /* quadric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quadric.h; sourceTree = "<group>"; };
-		C9A8AF071C83D96900CBCA09 /* example2.scene */ = {isa = PBXFileReference; lastKnownFileType = text; path = example2.scene; sourceTree = "<group>"; };
 		C9A8AF081C83D9A200CBCA09 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
 		C9A8AF091C83D9A200CBCA09 /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
 		C9A8AF0B1C83E8BF00CBCA09 /* colordata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = colordata.cpp; sourceTree = "<group>"; };
@@ -90,7 +89,6 @@
 				C9A8AF0E1C84355500CBCA09 /* readme.md */,
 				C9A8AF011C83979000CBCA09 /* flowers.scene */,
 				C9A8AF001C8396B900CBCA09 /* example.scene */,
-				C9A8AF071C83D96900CBCA09 /* example2.scene */,
 				C9F9AC671C68465F0074A0A4 /* GLUT.framework */,
 				C9F9AC651C68465A0074A0A4 /* OpenGL.framework */,
 				C9F9AC581C6845C20074A0A4 /* Source */,
