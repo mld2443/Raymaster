@@ -9,7 +9,7 @@
 
 sphere::sphere(const colordata& colors,
 			   const FLOAT3& pos,
-			   const float& radius) : quadric(colors, pos, {1,1,1,0,0,0,0,0,0,-radius}) {}
+			   const float& radius) : quadric(colors, pos, {1,1,1,0,0,0,0,0,0,-(radius*radius)}) {}
 
 sphere::~sphere() {
 	delete m_colors;

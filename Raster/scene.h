@@ -8,7 +8,7 @@
 #ifndef scene_h
 #define scene_h
 
-#include <exception>
+#include <stdexcept>
 #include <iostream>
 #include <cstdarg>
 #include <fstream>
@@ -24,52 +24,21 @@
 
 class scene {
 public:
-	class fileNotFound: public std::exception {
-		virtual const char* what() const throw() {
-			return "Could not open file";
-		}
+	struct fileNotFound: public std::runtime_error {
+        fileNotFound(const std::string file): runtime_error("File \"" + file + "\" not found") {}
 	};
 	
-	class unrecognizedType: public std::exception {
-	public:
-		unrecognizedType(const std::string t): type(t) {}
-		
-	private:
-		virtual const char* what() const throw() {
-			return ("Unrecognized type \"" + type + "\"").c_str();
-		}
-		
-		std::string type;
-	};
+	struct unrecognizedType: public std::runtime_error {
+		unrecognizedType(const std::string t): runtime_error("Unrecognized type \"" + t + "\"") {}
+    };
 	
-	class unrecognizedSymbol: public std::exception {
-	public:
-		unrecognizedSymbol(const std::string s, const std::string t): symbol(s) {}
-		
-	private:
-		virtual const char* what() const throw() {
-			return ("Unrecognized symbol \"" + symbol + "\" while defining type \"" + type + "\"").c_str();
-		}
-		
-		std::string symbol, type;
-	};
+	struct unrecognizedSymbol: public std::runtime_error {
+		unrecognizedSymbol(const std::string s, const std::string t):
+        runtime_error("Unrecognized symbol \"" + s + "\" while defining type \"" + t + "\"") {}
+    };
 	
-	class multipleScenes: public std::exception {
-		virtual const char* what() const throw() {
-			return "More than one scene defined";
-		}
-	};
-	
-	class incompleteType: public std::exception {
-	public:
-		incompleteType(const std::string t): type(t) {}
-		
-	private:
-		virtual const char* what() const throw() {
-			return ("Object of type \"" + type + "\" not properly defined").c_str();
-		}
-		
-		std::string type;
+	struct incompleteType: public std::runtime_error {
+		incompleteType(const std::string t): runtime_error("Object of type \"" + t + "\" not properly defined") {}
 	};
 	
 	scene(const char *filename);

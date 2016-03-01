@@ -171,7 +171,7 @@ void camera::castRay(GLfloat *pixel, const FLOAT3& orig, const scene* data) cons
 }
 
 FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const scene* data) const {
-	FLOAT3 glow, ambient, diffuse = {}, specular = {};
+    FLOAT3 glow{}, ambient{}, diffuse{}, specular{};
 	
 	glow = s->getGlow();
 	

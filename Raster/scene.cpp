@@ -20,7 +20,7 @@ scene::scene(const char *filename) {
 	
 	// If we can't open the file, there's a problem!
 	if (!file.is_open()) {
-		throw fileNotFound();
+		throw fileNotFound(filename);
 	}
 	
 	// iterate through the file
@@ -149,13 +149,13 @@ scene::scene(const char *filename) {
 				linestream << token;
 				token.clear();
 				
-				linestream >> token;
+                linestream >> token >> std::ws;
 				
 				if (token[0] == '#') {
 					getline(linestream, token);
 				}
 				else if (token == "color") {
-					linestream >> colorname;
+                    getline(linestream, colorname);
 					
 					if (colors.find(colorname) == colors.end())
 						throw unrecognizedSymbol(colorname, "plane");
@@ -206,13 +206,13 @@ scene::scene(const char *filename) {
 				linestream << token;
 				token.clear();
 				
-				linestream >> token;
+                linestream >> token >> std::ws;
 				
 				if (token[0] == '#') {
 					getline(linestream, token);
 				}
 				else if (token == "color") {
-					linestream >> colorname;
+                    getline(linestream, colorname);
 					
 					if (colors.find(colorname) == colors.end())
 						throw unrecognizedSymbol(colorname, "sphere");
@@ -263,13 +263,13 @@ scene::scene(const char *filename) {
 				linestream << token;
 				token.clear();
 				
-				linestream >> token;
+                linestream >> token >> std::ws;
 				
 				if (token[0] == '#') {
 					getline(linestream, token);
 				}
 				else if (token == "color") {
-					linestream >> colorname;
+                    getline(linestream, colorname);
 					
 					if (colors.find(colorname) == colors.end())
 						throw unrecognizedSymbol(colorname, "cylinder");
@@ -320,13 +320,13 @@ scene::scene(const char *filename) {
 				linestream << token;
 				token.clear();
 				
-				linestream >> token;
+                linestream >> token >> std::ws;
 				
 				if (token[0] == '#') {
 					getline(linestream, token);
 				}
 				else if (token == "color") {
-					linestream >> colorname;
+					getline(linestream, colorname);
 					
 					if (colors.find(colorname) == colors.end())
 						throw unrecognizedSymbol(colorname, "quadric");
@@ -466,9 +466,6 @@ scene::scene(const char *filename) {
 		linestream.str(std::string());
 		linestream.clear();
 	}
-	
-	for (auto &pair : colors)
-		pair.second->~colordata();
 }
 
 scene::~scene() {
