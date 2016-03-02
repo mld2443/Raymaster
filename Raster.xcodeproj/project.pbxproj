@@ -10,6 +10,7 @@
 		C9A8AF061C83C13D00CBCA09 /* quadric.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A8AF041C83C13D00CBCA09 /* quadric.cpp */; };
 		C9A8AF0A1C83D9A200CBCA09 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A8AF081C83D9A200CBCA09 /* scene.cpp */; };
 		C9A8AF0D1C83E8BF00CBCA09 /* colordata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A8AF0B1C83E8BF00CBCA09 /* colordata.cpp */; };
+		C9BA7E841C86EEDE00720357 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BA7E821C86EEDE00720357 /* system.cpp */; };
 		C9BC62531C7B6E2A008D3142 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62511C7B6E2A008D3142 /* light.cpp */; };
 		C9BC62561C7B6EDD008D3142 /* pointlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62541C7B6EDD008D3142 /* pointlight.cpp */; };
 		C9BC62591C7B703B008D3142 /* directionlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BC62571C7B703B008D3142 /* directionlight.cpp */; };
@@ -46,6 +47,8 @@
 		C9A8AF0B1C83E8BF00CBCA09 /* colordata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = colordata.cpp; sourceTree = "<group>"; };
 		C9A8AF0C1C83E8BF00CBCA09 /* colordata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colordata.h; sourceTree = "<group>"; };
 		C9A8AF0E1C84355500CBCA09 /* readme.md */ = {isa = PBXFileReference; explicitFileType = text; path = readme.md; sourceTree = "<group>"; };
+		C9BA7E821C86EEDE00720357 /* system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = system.cpp; sourceTree = "<group>"; };
+		C9BA7E831C86EEDE00720357 /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = system.h; sourceTree = "<group>"; };
 		C9BC62511C7B6E2A008D3142 /* light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		C9BC62521C7B6E2A008D3142 /* light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
 		C9BC62541C7B6EDD008D3142 /* pointlight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pointlight.cpp; sourceTree = "<group>"; };
@@ -109,6 +112,7 @@
 			children = (
 				C9F9AC691C6846790074A0A4 /* Headers */,
 				C9F9AC591C6845C20074A0A4 /* main.cpp */,
+				C9BA7E821C86EEDE00720357 /* system.cpp */,
 				C9A8AF081C83D9A200CBCA09 /* scene.cpp */,
 				C9BC62601C7C122A008D3142 /* camera.cpp */,
 				C9F9AC701C6865540074A0A4 /* shape.cpp */,
@@ -129,6 +133,7 @@
 		C9F9AC691C6846790074A0A4 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				C9BA7E831C86EEDE00720357 /* system.h */,
 				C9A8AF091C83D9A200CBCA09 /* scene.h */,
 				C9BC62611C7C122A008D3142 /* camera.h */,
 				C9F9AC641C6845EC0074A0A4 /* shape.h */,
@@ -203,6 +208,7 @@
 			files = (
 				C9BC625F1C7B8192008D3142 /* float3.cpp in Sources */,
 				C9BC62591C7B703B008D3142 /* directionlight.cpp in Sources */,
+				C9BA7E841C86EEDE00720357 /* system.cpp in Sources */,
 				C9F9AC721C6865540074A0A4 /* shape.cpp in Sources */,
 				C9F9AC6F1C6864A30074A0A4 /* sphere.cpp in Sources */,
 				C9A8AF0A1C83D9A200CBCA09 /* scene.cpp in Sources */,

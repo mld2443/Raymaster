@@ -15,6 +15,13 @@ colordata::colordata(const FLOAT3& amb, const FLOAT3& dif, const FLOAT3& spe, co
 	m_glow = new FLOAT3(glo);
 }
 
+colordata::colordata(const colordata& c):
+	m_ambient(new FLOAT3(*c.m_ambient)),
+	m_diffuse(new FLOAT3(*c.m_diffuse)),
+	m_specular(new FLOAT3(*c.m_specular)),
+	m_shininess(new float(*c.m_shininess)),
+	m_glow(new FLOAT3(*c.m_glow)) {}
+
 colordata::~colordata() {
 	delete m_ambient;
 	delete m_diffuse;

@@ -11,41 +11,47 @@
 #else
 	#include <GL/glut.h>
 #endif
+#include <iostream>
+#include <ctime>
 
-#include "scene.h"
-#include "camera.h"
+#include "system.h"
+
 
 #define WINDOW_OFFX 100
 #define WINDOW_OFFY 100
 
-int mouseX = -1, mouseY = -1;
-unsigned int window_width = 1280, window_height = 720;
-int window = 0;
-bool mouseLeftDown = false, mouseRightDown = false;
 
-scene *example;
-camera *tracer;
+int window = 0;
+
+
+class system *tracer;
+
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	
+
 	glFlush();
 	
-	unsigned int width = glutGet(GLUT_WINDOW_WIDTH), height = glutGet(GLUT_WINDOW_HEIGHT);
-	
-	GLfloat *pixels = tracer->capture(example);
-	
-	glDrawPixels(width, height, GL_RGB, GL_FLOAT, pixels);
-	
+	std::cout << "Tracing...";
+	clock_t begin = clock();
+
+	GLfloat *pixels = tracer->capture();
+
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+	std::cout << '\t' << elapsed_secs << "s" << std::endl;
+
+	glDrawPixels(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), GL_RGB, GL_FLOAT, pixels);
+
 	glFlush();
-	
+
 	delete[] pixels;
-	
+
 	glutSwapBuffers();
 }
 
 void init() {
-	/* select clearing color 	*/
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glDisable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
@@ -57,26 +63,6 @@ void init() {
 	glLoadIdentity();
 	
 	glutPostRedisplay();
-}
-
-void mouse(int button, int state, int x, int y) {
-	switch(button)
-	{
-		case GLUT_LEFT_BUTTON:
-			mouseLeftDown = state == GLUT_DOWN;
-			break;
-		case GLUT_RIGHT_BUTTON:
-			mouseRightDown = state == GLUT_DOWN;
-			break;
-	}
-	
-	mouseX = x;
-	mouseY = y;
-}
-
-void motion(int x, int y) {
-	mouseX = x;
-	mouseY = y;
 }
 
 void reshape(int w, int h) {
@@ -118,28 +104,29 @@ void key(unsigned char c, int x, int y) {
 }
 
 int main(int argc, char** argv) {
-	if (argc != 2 && argc != 4 && argc != 5) {
-		printf("expected \"%s file.scene [width height]\"\n", argv[0]);
+	if (argc != 2) {
+		std:: cout << "Expected \"" << argv[0] <<  " file.scene\"\n" << std::endl;
 		return 1;
-	}
-	
-	if (argc == 4) {
-		window_width = atoi(argv[2]);
-		window_height = atoi(argv[3]);
 	}
 	
 	try {
-		example = new scene(argv[1]);
-		tracer = new camera(window_width, window_height, {30,10,-8}, {-60,-10,8}, 70, 2, 10000, 16);
+		std::cout << "Loading...";
+		clock_t begin = clock();
+		
+		tracer = new class system(argv[1]);
+		
+		clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		std::cout << '\t' << elapsed_secs << "s" << std::endl;
 	}
 	catch(const std::exception& e){
-        std::cout << "Exception occured: " << e.what() << std::endl;
-		return 1;
+		std::cout << std::endl << "Exception occured: " << e.what() << std::endl;
+		return 2;
 	}
 	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
-	glutInitWindowSize(window_width, window_height);
+	glutInitWindowSize(tracer->getCamera()->getXRes(), tracer->getCamera()->getYRes());
 	glutInitWindowPosition(WINDOW_OFFX, WINDOW_OFFY);
 	window = glutCreateWindow("Raymaster 5000");
 	
@@ -147,8 +134,6 @@ int main(int argc, char** argv) {
 	
 	glutReshapeFunc (reshape);
 	glutDisplayFunc(display);
-	glutMouseFunc(mouse);
-	glutMotionFunc(motion);
 	glutKeyboardFunc(key);
 	glutMainLoop();
 	return 0;

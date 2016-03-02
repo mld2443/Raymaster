@@ -13,6 +13,7 @@
 class colordata {
 public:
 	colordata(const FLOAT3& ambient = {}, const FLOAT3& diffuse = {}, const FLOAT3& specular = {}, const float& shininess = 0.0, const FLOAT3& glow = {});
+	colordata(const colordata&);
 	~colordata();
 	
 	FLOAT3 getAmbient() const;

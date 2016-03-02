@@ -11,24 +11,24 @@ camera::camera(const unsigned int& xRes, const unsigned int& yRes,
 			   const FLOAT3& position, const FLOAT3& normal,
 			   const float& FOV,
 			   const float& nearClip, const float& farClip,
+			   const std::list<shape*> *shapelist,
+			   const std::list<light*> *lightlist,
 			   const unsigned int& antialiasing,
-			   const FLOAT3& up) {
-	m_xRes = new unsigned int(xRes);
-	m_yRes = new unsigned int(yRes);
-	m_pos = new FLOAT3(position);
-	m_normal = new FLOAT3(normal.normalize());
-	m_xFOV = new float(FOV);
-	m_nearClip = new float(nearClip);
-	m_farClip = new float(farClip);
-	m_antialiasing = new unsigned int(antialiasing);
-	m_upDir = new FLOAT3(up);
+			   const FLOAT3& up):
+	m_xRes(new unsigned int(xRes)), m_yRes(new unsigned int(yRes)),
+	m_pos(new FLOAT3(position)), m_normal(new FLOAT3(normal.normalize())),
+	m_xFOV(new float(FOV)),
+	m_nearClip(new float(nearClip)), m_farClip(new float(farClip)),
+	shapes(shapelist),
+	lights(lightlist),
+	m_antialiasing(new unsigned int(antialiasing)),
+	m_upDir(new FLOAT3(up)),
 	
-	m_P00 = m_P10 = m_P01 = m_P11 = 0;
-	m_deltaX = m_deltaY = 0;
+	m_P00(0), m_P10(0), m_P01(0), m_P11(0),
+	m_deltaX(0), m_deltaY(0),
 	
-	m_rng = new std::default_random_engine();
-	m_unif = new std::uniform_real_distribution<float>(0, 1);
-}
+	m_rng(new std::default_random_engine()),
+	m_unif(new std::uniform_real_distribution<float>(0, 1)) {}
 
 camera::~camera() {
 	delete m_xRes;
@@ -53,7 +53,7 @@ camera::~camera() {
 	delete m_xFOV;
 	delete m_nearClip;
 	delete m_farClip;
-	m_nearClip = m_xFOV = m_farClip = 0;
+	m_xFOV = m_nearClip = m_farClip = 0;
 	
 	delete m_rng;
 	delete m_unif;
@@ -70,6 +70,14 @@ FLOAT3 camera::getNormal() const{
 	return *m_normal;
 }
 
+unsigned int camera::getXRes() const {
+	return *m_xRes;
+}
+
+unsigned int camera::getYRes() const {
+	return *m_yRes;
+}
+
 
 void camera::setPos(const FLOAT3& position) {
 	*m_pos = position;
@@ -79,7 +87,7 @@ void camera::setNormal(const FLOAT3& normal) {
 	*m_normal = normal;
 }
 
-GLfloat* camera::capture(const scene* data){
+GLfloat* camera::capture(const FLOAT3& ambientLight, const float& diffuseOffset){
 	unsigned long pixindex = 0;
 	GLfloat *pixels = new GLfloat[*m_xRes * *m_yRes * 3];
 	FLOAT3 vRay, hRay;
@@ -96,7 +104,7 @@ GLfloat* camera::capture(const scene* data){
 			pixels[pixindex+1] = 0.0f;
 			pixels[pixindex+2] = 0.0f;
 			
-			castRay(pixels + pixindex, hRay, data);
+			castRay(pixels + pixindex, hRay, ambientLight, diffuseOffset);
 			
 			// increments
 			hRay += *m_deltaX;
@@ -139,26 +147,29 @@ void camera::updateViewport() {
 	*m_deltaY = (*m_P01 - *m_P00) / (float)*m_yRes;
 }
 
-void camera::castRay(GLfloat *pixel, const FLOAT3& orig, const scene* data) const {
+void camera::castRay(GLfloat *pixel, const FLOAT3& origin, const FLOAT3& ambientLight, const float& diffuseOffset) const {
 	for (int samples = 0; samples < *m_antialiasing; ++samples) {
 		float r1, r2, zValue;
 		FLOAT3 sample, ray, color;
+		shape *closest = 0;
 		
 		r1 = (*m_unif)(*m_rng), r2 = (*m_unif)(*m_rng);
 		
-		sample = orig + (*m_deltaY * r1) + (*m_deltaX * r2);
+		sample = origin + (*m_deltaY * r1) + (*m_deltaX * r2);
 		ray = (sample - *m_pos).normalize();
 		
 		zValue = *m_farClip;
 		color = {0.0f, 0.0f, 0.0f};
 		
-		for (shape *s : data->getShapes()) {
+		for (shape *s : *shapes) {
 			float intersect = s->intersectRay(*m_pos, ray);
 			if (intersect > *m_nearClip && intersect < zValue) {
 				zValue = intersect;
-				color = getColor(s, *m_pos + (ray * intersect), -ray, data);
+				closest = s;
 			}
 		}
+		
+		color = getColor(closest, *m_pos + (ray * zValue), -ray, ambientLight, diffuseOffset);
 		
 		pixel[0] += color.x;
 		pixel[1] += color.y;
@@ -170,18 +181,18 @@ void camera::castRay(GLfloat *pixel, const FLOAT3& orig, const scene* data) cons
 	pixel[2] /= float(*m_antialiasing);
 }
 
-FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const scene* data) const {
-    FLOAT3 glow{}, ambient{}, diffuse{}, specular{};
+FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const FLOAT3& ambientLight, const float& diffuseOffset) const {
+	FLOAT3 glow{}, ambient{}, diffuse{}, specular{};
 	
 	glow = s->getGlow();
 	
-	ambient = data->getAmbientLight() * s->getAmbient();
+	ambient = ambientLight * s->getAmbient();
 	
-	for (light *l : data->getLights()) {
+	for (light *l : *lights) {
 		float product = s->getNormal(point).dot(l->normalToLight(point));
-		float diffuseOffset = (product + data->getDiffuseOffset())/(1 + data->getDiffuseOffset());
+		float calculatedOffset = (product + diffuseOffset)/(1 + diffuseOffset);
 		
-		diffuse += s->getDiffuse() * l->getColor() * std::max(diffuseOffset, 0.0f);
+		diffuse += s->getDiffuse() * l->getColor() * std::max(calculatedOffset, 0.0f);
 		
 		if (product > 0.0f) {
 			FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();

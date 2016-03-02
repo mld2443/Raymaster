@@ -71,14 +71,6 @@
             argument = "flowers.scene"
             isEnabled = "NO">
          </CommandLineArgument>
-         <CommandLineArgument
-            argument = "1280 720"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "1024 768"
-            isEnabled = "YES">
-         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>

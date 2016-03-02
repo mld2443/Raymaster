@@ -10,9 +10,9 @@ TODO List:
 * <strike>Add in general quadrics.</strike>
 * <strike>Change to a Scene paradigm, with multiple cameras possible</strike>
 * <strike>Rewrite filehandler and convert scenes to xml</strike>
-* <b>Settle on the correct z-depth before getting shape's color</b>
+* <strike>Settle on the correct z-depth before getting shape's color</strike>
 * <b>Ditch OpenGL for a simple PNG writer</b>
-* Clean up naming conventions
-* Document all of the code, not just the critical parts
+* Encapsulate the scene/camera paradigm in a new class
+* Add in rotations
 * Add finite shapes / unions and subtractions
 * Add subdivision surfaces

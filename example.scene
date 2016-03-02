@@ -12,13 +12,13 @@ ambient (0.1,0.1,0.1)
 offset 0.5
 
 # Cameras
-#camera
-#resolution 1280 720
-#antialiasing 16
-#position (30,10,-8)
-#normal (-60,-10,8)
-#fov 70
-#clipping 0.2 10000
+camera
+resolution 1280 720
+antialiasing 16
+position (30,10,-8)
+normal (-60,-10,8)
+fov 70
+clipping 0.2 10000
 
 # lights
 pointlight
