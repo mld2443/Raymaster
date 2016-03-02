@@ -44,6 +44,7 @@ public:
 	
 private:
 	void updateViewport();
+	
 	void castRay(GLfloat*, const FLOAT3&, const FLOAT3&, const float&) const;
 	FLOAT3 getColor(const shape*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&) const;
 	

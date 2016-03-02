@@ -189,15 +189,17 @@ FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 	ambient = ambientLight * s->getAmbient();
 	
 	for (light *l : *lights) {
-		float product = s->getNormal(point).dot(l->normalToLight(point));
-		float calculatedOffset = (product + diffuseOffset)/(1 + diffuseOffset);
-		
-		diffuse += s->getDiffuse() * l->getColor() * std::max(calculatedOffset, 0.0f);
-		
-		if (product > 0.0f) {
-			FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();
-			float value = (s->getNormal(point)).dot(halfway);
-			specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
+		if (l->illuminated(point)) {
+			float product = s->getNormal(point).dot(l->normalToLight(point));
+			float calculatedOffset = (product + diffuseOffset)/(1 + diffuseOffset);
+			
+			diffuse += s->getDiffuse() * l->getColor() * std::max(calculatedOffset, 0.0f);
+			
+			if (product > 0.0f) {
+				FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();
+				float value = (s->getNormal(point)).dot(halfway);
+				specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
+			}
 		}
 	}
 	

@@ -7,9 +7,9 @@
 
 #include "pointlight.h"
 
-pointlight::pointlight(const FLOAT3& c, const FLOAT3& p) {
-	m_color = new FLOAT3(c);
-	m_position = new FLOAT3(p);
+pointlight::pointlight(const FLOAT3& color, const FLOAT3& position) {
+	m_color = new FLOAT3(color);
+	m_position = new FLOAT3(position);
 }
 
 pointlight::~pointlight() {
@@ -28,4 +28,8 @@ light::lighttype pointlight::getType() const {
 
 FLOAT3 pointlight::normalToLight(const FLOAT3& p) const {
 	return (*m_position - p).normalize();
+}
+
+bool pointlight::illuminated(const FLOAT3 &) const{
+	return true;
 }

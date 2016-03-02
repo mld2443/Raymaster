@@ -12,12 +12,13 @@
 
 class light {
 public:
-	enum lighttype { point, directional };
+	enum lighttype { point, directional, spot };
 	
 	virtual lighttype getType() const =0;
 	FLOAT3 getColor() const;
 	
 	virtual FLOAT3 normalToLight(const FLOAT3&) const =0;
+	virtual bool illuminated(const FLOAT3&) const =0;
 	
 protected:
 	FLOAT3 *m_color;

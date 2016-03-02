@@ -18,6 +18,7 @@ public:
 	lighttype getType() const;
 	
 	FLOAT3 normalToLight(const FLOAT3&) const;
+	bool illuminated(const FLOAT3&) const;
 	
 private:
 	FLOAT3 *m_position;

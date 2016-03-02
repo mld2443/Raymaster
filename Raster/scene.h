@@ -23,6 +23,7 @@
 #include "cylinder.h"
 #include "pointlight.h"
 #include "directionlight.h"
+#include "spotlight.h"
 
 class scene {
 public:

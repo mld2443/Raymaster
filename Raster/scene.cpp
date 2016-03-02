@@ -53,6 +53,10 @@ scene::~scene() {
 				delete (directionlight*)l;
 				break;
 				
+			case light::spot:
+				delete (spotlight*)l;
+				break;
+				
 			default:
 				break;
 		}

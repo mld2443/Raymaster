@@ -29,3 +29,7 @@ light::lighttype directionlight::getType() const {
 FLOAT3 directionlight::normalToLight(const FLOAT3& p) const {
 	return -(*m_normal);
 }
+
+bool directionlight::illuminated(const FLOAT3&) const {
+	return true;
+}

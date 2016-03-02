@@ -71,9 +71,9 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		else if (token == "camera") {
 			unsigned int xRes, yRes, antialiasing(16);
-			FLOAT3 position, normal, up{0,1,0};
+			FLOAT3 position, direction, up{0,1,0};
 			float xFOV, nearClip, farClip;
-			bool res(false), pos(false), nor(false), fov(false), cli(false);
+			bool res(false), pos(false), dir(false), fov(false), cli(false);
 			
 			token.clear();
 			getline(file, token);
@@ -95,9 +95,9 @@ system::system(const char *filename): m_scene(new scene()) {
 				} else if (token == "position") {
 					linestream >> position;
 					pos = true;
-				} else if (token == "normal" || token == "direction") {
-					linestream >> normal;
-					nor = true;
+				} else if (token == "direction") {
+					linestream >> direction;
+					dir = true;
 				} else if (token == "fov" || token == "xfov") {
 					linestream >> xFOV;
 					fov = true;
@@ -120,11 +120,11 @@ system::system(const char *filename): m_scene(new scene()) {
 				getline(file, token);
 			}
 			
-			if (!res || !pos || !nor || !fov || !cli) {
+			if (!res || !pos || !dir || !fov || !cli) {
 				throw incompleteType("camera");
 			}
 			
-			m_scene->setCamera(new camera(xRes, yRes, position, normal,xFOV, nearClip, farClip, m_scene->getShapes(), m_scene->getLights(), antialiasing, up));
+			m_scene->setCamera(new camera(xRes, yRes, position, direction,xFOV, nearClip, farClip, m_scene->getShapes(), m_scene->getLights(), antialiasing, up));
 		}
 		
 		// Define a color
@@ -433,8 +433,8 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		// add directional light
 		else if (token == "directlight") {
-			FLOAT3 color{}, normal{};
-			bool clr(false), nor(false);
+			FLOAT3 color{}, direction{};
+			bool clr(false), dir(false);
 			
 			token.clear();
 			getline(file, token);
@@ -451,9 +451,9 @@ system::system(const char *filename): m_scene(new scene()) {
 				} else if (token == "color") {
 					linestream >> color;
 					clr = true;
-				} else if (token == "normal") {
-					linestream >> normal;
-					nor = true;
+				} else if (token == "direction") {
+					linestream >> direction;
+					dir = true;
 				} else {
 					throw unrecognizedSymbol(token, "directlight");
 				}
@@ -468,11 +468,62 @@ system::system(const char *filename): m_scene(new scene()) {
 				getline(file, token);
 			}
 			
-			if (!clr || !nor) {
+			if (!clr || !dir) {
 				throw incompleteType("directlight");
 			}
 			
-			m_scene->addLight(new directionlight(color, normal));
+			m_scene->addLight(new directionlight(color, direction));
+		}
+		
+		// add spotlight
+		else if (token == "spotlight") {
+			FLOAT3 color{}, position{}, direction{};
+			float angle{};
+			bool clr(false), pos(false), dir(false), ang(false);
+			
+			token.clear();
+			getline(file, token);
+			
+			while (token != "") {
+				linestream.clear();
+				linestream << token;
+				token.clear();
+				
+				linestream >> token;
+				
+				if (token[0] == '#') {
+					getline(linestream, token);
+				} else if (token == "color") {
+					linestream >> color;
+					clr = true;
+				} else if (token == "position") {
+					linestream >> position;
+					pos = true;
+				} else if (token == "direction") {
+					linestream >> direction;
+					dir = true;
+				} else if (token == "angle") {
+					linestream >> angle;
+					ang = true;
+				} else {
+					throw unrecognizedSymbol(token, "spotlight");
+				}
+				
+				if (!linestream.eof()) {
+					token.clear();
+					getline(linestream, token);
+					throw unrecognizedSymbol(token, "spotlight");
+				}
+				
+				token.clear();
+				getline(file, token);
+			}
+			
+			if (!clr || !pos || !dir || !ang) {
+				throw incompleteType("spotlight");
+			}
+			
+			m_scene->addLight(new spotlight(color, position, direction, angle));
 		}
 		
 		// token is unrecognized
