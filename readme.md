@@ -1,6 +1,6 @@
 The RAYMASTER 5000
 
-<table border-spacing:0 padding:0 margin:0>
+<table border:0 border-spacing:0 padding:0 margin:0>
 <tr>
 <td align=center><font size=2>Single light:</font></td>
 </tr>
