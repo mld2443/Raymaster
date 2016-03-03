@@ -8,6 +8,8 @@
 #ifndef directionlight_h
 #define directionlight_h
 
+#include <float.h>
+
 #include "light.h"
 
 class directionlight : public light {
@@ -19,6 +21,7 @@ public:
 	
 	FLOAT3 normalToLight(const FLOAT3&) const;
 	bool illuminated(const FLOAT3&) const;
+	float distance(const FLOAT3&) const;
 	
 private:
 	FLOAT3 *m_normal;

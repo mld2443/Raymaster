@@ -19,6 +19,7 @@ public:
 	
 	FLOAT3 normalToLight(const FLOAT3&) const;
 	bool illuminated(const FLOAT3&) const;
+	float distance(const FLOAT3&) const;
 	
 private:
 	FLOAT3 *m_position;

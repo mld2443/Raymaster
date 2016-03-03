@@ -182,15 +182,17 @@ void camera::castRay(GLfloat *pixel, const FLOAT3& origin, const FLOAT3& ambient
 }
 
 FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const FLOAT3& ambientLight, const float& diffuseOffset) const {
-	FLOAT3 glow{}, ambient{}, diffuse{}, specular{};
+	FLOAT3 glow{}, ambient{}, diffuse{}, specular{}, directionToLight{};
 	
 	glow = s->getGlow();
 	
 	ambient = ambientLight * s->getAmbient();
 	
 	for (light *l : *lights) {
-		if (l->illuminated(point)) {
-			float product = s->getNormal(point).dot(l->normalToLight(point));
+		directionToLight = l->normalToLight(point);
+		
+		if (l->illuminated(point) && !obstructed(s, point, directionToLight, l)) {
+			float product = s->getNormal(point).dot(directionToLight);
 			float calculatedOffset = (product + diffuseOffset)/(1 + diffuseOffset);
 			
 			diffuse += s->getDiffuse() * l->getColor() * std::max(calculatedOffset, 0.0f);
@@ -204,4 +206,18 @@ FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 	}
 	
 	return glow + ambient + diffuse + specular;
+}
+
+bool camera::obstructed(const shape* object, const FLOAT3& point, const FLOAT3& directionToLight, const light* source) const {
+	float distanceToLight(source->distance(point));
+	
+	for (shape *s : *shapes) {
+		if (s != object) {
+			float intersect = s->intersectRay(point, directionToLight);
+			if (intersect > 0.0 && intersect < distanceToLight)
+				return true;
+		}
+	}
+	
+	return false;
 }

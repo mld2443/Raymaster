@@ -14,7 +14,7 @@ offset 0.5
 # Cameras
 camera
 resolution 1280 720
-antialiasing 1
+antialiasing 16
 position (30,10,-8)
 direction (-60,-10,8)
 fov 70

@@ -7,8 +7,8 @@ Provided are the project files to run the raytracer. If not using Mac OS X, comp
 I have provided an example scene, "example.scene" for testing purposes.
 
 TODO List:
+* <strike>Encapsulate the scene/camera paradigm in a new class</strike>
 * <b>Ditch OpenGL for a simple PNG writer</b>
-* Encapsulate the scene/camera paradigm in a new class
 * Add in rotations
 * Realistic supersampling
 * Add finite shapes / unions and subtractions

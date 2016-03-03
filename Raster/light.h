@@ -19,6 +19,7 @@ public:
 	
 	virtual FLOAT3 normalToLight(const FLOAT3&) const =0;
 	virtual bool illuminated(const FLOAT3&) const =0;
+	virtual float distance(const FLOAT3&) const =0;
 	
 protected:
 	FLOAT3 *m_color;

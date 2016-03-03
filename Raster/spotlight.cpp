@@ -39,3 +39,7 @@ bool spotlight::illuminated(const FLOAT3& point) const{
 	
 	return angleBetween <= *m_angle;
 }
+
+float spotlight::distance(const FLOAT3& point) const {
+	return (*m_position - point).len();
+}

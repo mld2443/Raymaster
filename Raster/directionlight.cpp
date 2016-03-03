@@ -33,3 +33,7 @@ FLOAT3 directionlight::normalToLight(const FLOAT3& p) const {
 bool directionlight::illuminated(const FLOAT3&) const {
 	return true;
 }
+
+float directionlight::distance(const FLOAT3& point) const {
+	return FLT_MAX;
+}

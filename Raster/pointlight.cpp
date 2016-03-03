@@ -33,3 +33,7 @@ FLOAT3 pointlight::normalToLight(const FLOAT3& p) const {
 bool pointlight::illuminated(const FLOAT3 &) const{
 	return true;
 }
+
+float pointlight::distance(const FLOAT3& point) const {
+	return (*m_position - point).len();
+}

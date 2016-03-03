@@ -47,6 +47,7 @@ private:
 	
 	void castRay(GLfloat*, const FLOAT3&, const FLOAT3&, const float&) const;
 	FLOAT3 getColor(const shape*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&) const;
+	bool obstructed(const shape*, const FLOAT3&, const FLOAT3&, const light*) const;
 	
 	unsigned int *m_xRes, *m_yRes, *m_antialiasing;
 	FLOAT3 *m_pos, *m_normal, *m_upDir, *m_P00, *m_P10, *m_P01, *m_P11, *m_deltaX, *m_deltaY;
