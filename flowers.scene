@@ -11,14 +11,25 @@ scene
 ambient (1,1,1)
 offset 0.5
 
+
 # Cameras
-#camera
-#resolution 1024 768
-#antialiasing 16
-#position (0,0,0)
-#normal (-1,-1,20)
-#fov 60
-#clipping 0.1 1000
+camera
+resolution 1024 768
+antialiasing 16
+position (0,0,0)
+direction (-1,-1,20)
+#position (-2,30,20)
+#direction (0,-1,0)
+#up (0,0,1)
+fov 60
+clipping 0.1 1000
+
+
+# Lights
+directlight
+color (1,1,1)
+direction (2,-1,2)
+
 
 # Colors
 color vase color
@@ -26,69 +37,60 @@ ambient (0.359,0.164,0.184)
 diffuse (0.359,0.535,0.422)
 specular (0.176,0.227,0.277)
 shine 30
-glow (0,0,0)
 
 color wall color
 ambient (0.363,0.227,0.195)
 diffuse (0.301,0.398,0.352)
 specular (0.301,0.398,0.352)
 shine 2
-glow (0,0,0)
 
 color table color
 ambient (0.359,0.211,0.219)
 diffuse (0.227,0.453,0.367)
 specular (0.047,0.066,0.090)
 shine 3
-glow (0,0,0)
 
 color vase base color
 ambient (0.359,0.164,0.184)
 diffuse (0.359,0.535,0.422)
 specular (0.176,0.227,0.277)
 shine 30
-glow (0,0,0)
 
 color 1
 ambient (0.656,0.211,0.313)
 diffuse (0.191,0.477,0.418)
 specular (0.070,0.230,0.168)
 shine 4
-glow (0,0,0)
 
 color 2
 ambient (0.723,0.563,0.559)
 diffuse (0.195,0.355,0.344)
 specular (0.039,0.039,0.039)
 shine 4
-glow (0,0,0)
 
 color 3
 ambient (0.668,0.406,0.207)
 diffuse (0.129,0.250,0.156)
 specular (0.148,0.215,0.277)
 shine 16
-glow (0,0,0)
 
 color 4
 ambient (0.039,0.059,0.340)
 diffuse (0.098,0.148,0.180)
 specular (0.047,0.176,0.233)
 shine 16
-glow (0,0,0)
 
 color 5
 ambient (0.707,0.398,0.430)
 diffuse (0.191,0.492,0.379)
 specular (0.039,0.039,0.039)
 shine 16
-glow (0,0,0)
 
-
-# Lights
-directlight
-color (1,1,1)
-normal (2,-1,2)
+color 6
+ambient (0.586,0.137,0.324)
+diffuse (0.184,0.508,0.352)
+specular (0.129,0.254,0.164)
+shine 16
 
 
 # Planes
@@ -138,3 +140,13 @@ sphere flower 5
 color 5
 position (0.45,-2,16)
 radius 1.5
+
+sphere flower 6
+color 6
+position (4,2,19.5)
+radius 2
+
+sphere flower 7
+color 1
+position (-5.6,3.1,18.5)
+radius 2.4

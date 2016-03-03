@@ -22,7 +22,7 @@ camera::camera(const unsigned int& xRes, const unsigned int& yRes,
 	shapes(shapelist),
 	lights(lightlist),
 	m_antialiasing(new unsigned int(antialiasing)),
-	m_upDir(new FLOAT3(up)),
+	m_upDir(new FLOAT3(up.normalize())),
 	
 	m_P00(0), m_P10(0), m_P01(0), m_P11(0),
 	m_deltaX(0), m_deltaY(0),
