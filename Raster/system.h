@@ -14,10 +14,12 @@
 #else
 #include <GL/glut.h>
 #endif
+#include <functional>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 
 #include "scene.h"
 #include "camera.h"
@@ -53,6 +55,8 @@ public:
 	GLfloat* capture();
 	
 private:
+	static void takeObject(std::istream&, std::map<std::string, std::function<void (std::istream&)>>, std::string&);
+	
 	scene *m_scene;
 };
 
