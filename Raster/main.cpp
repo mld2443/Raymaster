@@ -12,7 +12,7 @@
 	#include <GL/glut.h>
 #endif
 #include <iostream>
-#include <ctime>
+#include <chrono>
 
 #include "system.h"
 
@@ -33,14 +33,12 @@ void display() {
 	glFlush();
 	
 	std::cout << "Tracing...";
-	clock_t begin = clock();
+	auto wcts = std::chrono::system_clock::now();
 
 	GLfloat *pixels = tracer->capture();
 
-	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-
-	std::cout << '\t' << elapsed_secs << "s" << std::endl;
+	std::chrono::duration<double> wctduration = (std::chrono::system_clock::now() - wcts);
+	std::cout << '\t' << wctduration.count() << "s" << std::endl;
 
 	glDrawPixels(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), GL_RGB, GL_FLOAT, pixels);
 
@@ -111,13 +109,12 @@ int main(int argc, char** argv) {
 	
 	try {
 		std::cout << "Loading...";
-		clock_t begin = clock();
+		auto wcts = std::chrono::system_clock::now();
 		
 		tracer = new class system(argv[1]);
 		
-		clock_t end = clock();
-		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-		std::cout << '\t' << elapsed_secs << "s" << std::endl;
+		std::chrono::duration<double> wctduration = (std::chrono::system_clock::now() - wcts);
+		std::cout << '\t' << wctduration.count() << "s" << std::endl;
 	}
 	catch(const std::exception& e){
 		std::cout << std::endl << "Exception occured: " << e.what() << std::endl;

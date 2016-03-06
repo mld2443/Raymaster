@@ -224,10 +224,10 @@ FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 			
 			if (product > 0.0f) {
 				FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();
-				float value = (s->getNormal(point)).dot(halfway);
+				float specularvalue = (s->getNormal(point)).dot(halfway);
 				
 				// color from specular highlights
-				specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
+				specular += s->getSpecular() * l->getColor() * pow(std::max(specularvalue, 0.0f), s->getShininess());
 			}
 		}
 	}
@@ -237,9 +237,12 @@ FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 
 // Used to calculate shadows
 bool camera::obstructed(const shape* object, const FLOAT3& point, const FLOAT3& directionToLight, const light* source) const {
+	// first get the distance from the surface to the light
 	float distanceToLight(source->distance(point));
 	
+	// then see if any shapes are closer than that
 	for (shape *s : *shapes) {
+		// we can ignore the original object
 		if (s != object) {
 			float intersect(s->intersectRay(point, directionToLight));
 			if (intersect > 0.0 && intersect < distanceToLight)

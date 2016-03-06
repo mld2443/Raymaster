@@ -22,7 +22,10 @@
 #include "shape.h"
 #include "light.h"
 
-#define THREADPOOLSIZE 4
+
+// The maximum number of threads to use while drawing
+#define THREADPOOLSIZE 5
+
 
 class camera {
 public:

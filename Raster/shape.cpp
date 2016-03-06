@@ -7,6 +7,7 @@
 
 #include "shape.h"
 
+// all the getters
 FLOAT3 shape::getAmbient() const {
 	return m_colors->getAmbient();
 }

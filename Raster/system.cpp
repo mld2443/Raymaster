@@ -37,8 +37,8 @@ system::system(const char *filename): m_scene(new scene()) {
 			FLOAT3 ambient{};
 			float offset{};
 			
-			args["ambient"] = [&](std::istream& is){ is >> ambient; };
-			args["offset"] = [&](std::istream& is){ is >> offset; };
+			args["ambient"] = [&](std::istream& is){ is >> ambient; m_scene->setAmbientLight(ambient); };
+			args["offset"] = [&](std::istream& is){ is >> offset; m_scene->setDiffuseOffset(offset); };
 			
 			takeObject(file, args, token);
 		}
