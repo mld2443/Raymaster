@@ -15,10 +15,14 @@
 	#include <GL/glut.h>
 #endif
 #include <random>
+#include <vector>
 #include <list>
 
+#include "threadpool.h"
 #include "shape.h"
 #include "light.h"
+
+#define THREADPOOLSIZE 4
 
 class camera {
 public:
@@ -45,7 +49,7 @@ public:
 private:
 	void updateViewport();
 	
-	void castRay(GLfloat*, const FLOAT3&, const FLOAT3&, const float&) const;
+	FLOAT3 castRays(const FLOAT3&, const FLOAT3&, const float&) const;
 	FLOAT3 getColor(const shape*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&) const;
 	bool obstructed(const shape*, const FLOAT3&, const FLOAT3&, const light*) const;
 	

@@ -7,6 +7,7 @@
 
 #include "camera.h"
 
+// constructor and destructor
 camera::camera(const unsigned int& xRes, const unsigned int& yRes,
 			   const FLOAT3& position, const FLOAT3& normal,
 			   const float& FOV,
@@ -62,6 +63,7 @@ camera::~camera() {
 }
 
 
+// getters
 FLOAT3 camera::getPos() const {
 	return *m_pos;
 }
@@ -79,6 +81,7 @@ unsigned int camera::getYRes() const {
 }
 
 
+// setters
 void camera::setPos(const FLOAT3& position) {
 	*m_pos = position;
 }
@@ -87,39 +90,47 @@ void camera::setNormal(const FLOAT3& normal) {
 	*m_normal = normal;
 }
 
+
+// starts the ray tracing, everything begins here
 GLfloat* camera::capture(const FLOAT3& ambientLight, const float& diffuseOffset){
-	unsigned long pixindex = 0;
+	threadpool pool(THREADPOOLSIZE);
 	GLfloat *pixels = new GLfloat[*m_xRes * *m_yRes * 3];
-	FLOAT3 vRay, hRay;
+	auto futurepixels = std::vector<std::future<FLOAT3>>();
+	FLOAT3 vRay{}, hRay{};
 	
+	// update the viewpoint in case the camera is moving
 	updateViewport();
 	
 	vRay = *m_P00;
 	
+	// calculate the value of each pixel
 	for (int j = 0; j < *m_yRes; ++j) {
 		hRay = vRay;
 		for (int i = 0; i < *m_xRes; ++i) {
-			// background color
-			pixels[pixindex] = 0.0f;
-			pixels[pixindex+1] = 0.0f;
-			pixels[pixindex+2] = 0.0f;
-			
-			castRay(pixels + pixindex, hRay, ambientLight, diffuseOffset);
+			futurepixels.emplace_back(pool.enqueue([&, hRay]{ return castRays(hRay, ambientLight, diffuseOffset); }));
 			
 			// increments
 			hRay += *m_deltaX;
-			pixindex += 3;
 		}
 		vRay += *m_deltaY;
+	}
+	
+	for (int i = 0; i < futurepixels.size(); ++i) {
+		FLOAT3 pixel = futurepixels[i].get();
+		pixels[(3 * i) + 0] = pixel.x;
+		pixels[(3 * i) + 1] = pixel.y;
+		pixels[(3 * i) + 2] = pixel.z;
 	}
 	
 	return pixels;
 }
 
 
+// updates the viewpoint and screenspace based on eye position and look direction
 void camera::updateViewport() {
 	float uWidth, vHeight;
 	
+	// calculate the screen dimensions relative to the eye vector given the FOV
 	uWidth = tanf((*m_xFOV / 2.0f) * (M_PI / 180.0f));
 	vHeight = ((float)*m_yRes / (float)*m_xRes) * uWidth;
 	
@@ -128,6 +139,7 @@ void camera::updateViewport() {
 		delete m_deltaY;
 	}
 	
+	// calculate the coordinate frame for screenspace
 	m_deltaX = new FLOAT3(m_normal->cross(*m_upDir).normalize());
 	m_deltaY = new FLOAT3(m_deltaX->cross(*m_normal).normalize());
 	
@@ -138,29 +150,40 @@ void camera::updateViewport() {
 		delete m_P11;
 	}
 	
+	// compute the four corners of the screen in the global coordinate space
 	m_P00 = new FLOAT3(*m_pos + *m_normal - (*m_deltaX * uWidth) - (*m_deltaY * vHeight));
 	m_P10 = new FLOAT3(*m_pos + *m_normal + (*m_deltaX * uWidth) - (*m_deltaY * vHeight));
 	m_P01 = new FLOAT3(*m_pos + *m_normal - (*m_deltaX * uWidth) + (*m_deltaY * vHeight));
 	m_P11 = new FLOAT3(*m_pos + *m_normal + (*m_deltaX * uWidth) + (*m_deltaY * vHeight));
 	
+	// compute the average width of a pixel represented in screenspace
 	*m_deltaX = (*m_P10 - *m_P00) / (float)*m_xRes;
 	*m_deltaY = (*m_P01 - *m_P00) / (float)*m_yRes;
 }
 
-void camera::castRay(GLfloat *pixel, const FLOAT3& origin, const FLOAT3& ambientLight, const float& diffuseOffset) const {
+// traces rays to find the closest shapes, and performs the antialiasing
+FLOAT3 camera::castRays(const FLOAT3& origin, const FLOAT3& ambientLight, const float& diffuseOffset) const {
+	// set the default pixel color
+	FLOAT3 pixel{0.0f, 0.0f, 0.0f};
+	
+	// collect samples of the scene for this current pixel
 	for (int samples = 0; samples < *m_antialiasing; ++samples) {
-		float r1, r2, zValue;
-		FLOAT3 sample, ray, color;
+		float horiOffset, vertOffset, zValue;
+		FLOAT3 subsample, ray, color;
 		shape *closest = 0;
 		
-		r1 = (*m_unif)(*m_rng), r2 = (*m_unif)(*m_rng);
+		// randomly generate offsets for the current subsample
+		horiOffset = (*m_unif)(*m_rng), vertOffset = (*m_unif)(*m_rng);
 		
-		sample = origin + (*m_deltaY * r1) + (*m_deltaX * r2);
-		ray = (sample - *m_pos).normalize();
+		// get the subsample position and construct a ray from it
+		subsample = origin + (*m_deltaX * horiOffset) + (*m_deltaY * vertOffset);
+		ray = (subsample - *m_pos).normalize();
 		
+		// initialize for color sampling
 		zValue = *m_farClip;
 		color = {0.0f, 0.0f, 0.0f};
 		
+		// detect the closest shape
 		for (shape *s : *shapes) {
 			float intersect = s->intersectRay(*m_pos, ray);
 			if (intersect > *m_nearClip && intersect < zValue) {
@@ -169,37 +192,41 @@ void camera::castRay(GLfloat *pixel, const FLOAT3& origin, const FLOAT3& ambient
 			}
 		}
 		
-		color = getColor(closest, *m_pos + (ray * zValue), -ray, ambientLight, diffuseOffset);
-		
-		pixel[0] += color.x;
-		pixel[1] += color.y;
-		pixel[2] += color.z;
+		// retrieve the shape's color
+		pixel += getColor(closest, *m_pos + (ray * zValue), -ray, ambientLight, diffuseOffset);
 	}
 	
-	pixel[0] /= float(*m_antialiasing);
-	pixel[1] /= float(*m_antialiasing);
-	pixel[2] /= float(*m_antialiasing);
+	// return the normalized supersampled value
+	return pixel / (float)(*m_antialiasing);
 }
 
+// samples a shape at a point to get a color given the current lighting conditions
 FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const FLOAT3& ambientLight, const float& diffuseOffset) const {
 	FLOAT3 glow{}, ambient{}, diffuse{}, specular{}, directionToLight{};
 	
+	// color independant of all other lighting conditions
 	glow = s->getGlow();
 	
+	// color dependant on the ambient light of the scene
 	ambient = ambientLight * s->getAmbient();
 	
+	// iterate through all lights in the scene
 	for (light *l : *lights) {
 		directionToLight = l->normalToLight(point);
 		
+		// shadow check
 		if (l->illuminated(point) && !obstructed(s, point, directionToLight, l)) {
 			float product = s->getNormal(point).dot(directionToLight);
 			float calculatedOffset = (product + diffuseOffset)/(1 + diffuseOffset);
 			
+			// color from direct diffuse illumination
 			diffuse += s->getDiffuse() * l->getColor() * std::max(calculatedOffset, 0.0f);
 			
 			if (product > 0.0f) {
 				FLOAT3 halfway = (toEye + l->normalToLight(point)).normalize();
 				float value = (s->getNormal(point)).dot(halfway);
+				
+				// color from specular highlights
 				specular += s->getSpecular() * l->getColor() * pow(std::max(value, 0.0f), s->getShininess());
 			}
 		}
@@ -208,12 +235,13 @@ FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye
 	return glow + ambient + diffuse + specular;
 }
 
+// Used to calculate shadows
 bool camera::obstructed(const shape* object, const FLOAT3& point, const FLOAT3& directionToLight, const light* source) const {
 	float distanceToLight(source->distance(point));
 	
 	for (shape *s : *shapes) {
 		if (s != object) {
-			float intersect = s->intersectRay(point, directionToLight);
+			float intersect(s->intersectRay(point, directionToLight));
 			if (intersect > 0.0 && intersect < distanceToLight)
 				return true;
 		}

@@ -61,6 +61,7 @@
 		C9BC625E1C7B8192008D3142 /* float3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float3.cpp; sourceTree = "<group>"; };
 		C9BC62601C7C122A008D3142 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		C9BC62611C7C122A008D3142 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		C9F879781C8BFF4E00274CF5 /* threadpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = threadpool.h; sourceTree = "<group>"; };
 		C9F9AC561C6845C20074A0A4 /* Raster */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raster; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9F9AC591C6845C20074A0A4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C9F9AC601C6845D40074A0A4 /* float3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = float3.h; sourceTree = "<group>"; };
@@ -150,6 +151,7 @@
 				C9BC62581C7B703B008D3142 /* directionlight.h */,
 				C9BA7E861C871A1B00720357 /* spotlight.h */,
 				C9A8AF0C1C83E8BF00CBCA09 /* colordata.h */,
+				C9F879781C8BFF4E00274CF5 /* threadpool.h */,
 				C9F9AC601C6845D40074A0A4 /* float3.h */,
 			);
 			name = Headers;

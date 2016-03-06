@@ -11,7 +11,8 @@ system::system(const char *filename): m_scene(new scene()) {
 	std::ifstream file(filename);
 	std::string token, name;
 	std::stringstream linestream;
-	std::map<std::string,colordata*> colors;
+	std::map<std::string, colordata*> colors;
+	std::map<std::string, std::function<void (std::istream&)>> args;
 	
 	// If we can't open the file, there's a problem!
 	if (!file.is_open())
@@ -36,37 +37,10 @@ system::system(const char *filename): m_scene(new scene()) {
 			FLOAT3 ambient{};
 			float offset{};
 			
-			token.clear();
-			getline(file, token);
+			args["ambient"] = [&](std::istream& is){ is >> ambient; };
+			args["offset"] = [&](std::istream& is){ is >> offset; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "ambient") {
-					linestream >> ambient;
-					m_scene->setAmbientLight(ambient);
-				} else if (token == "offset") {
-					linestream >> offset;
-					m_scene->setDiffuseOffset(offset);
-				} else {
-					throw unrecognizedSymbol(token, "scene");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "scene");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 		}
 		
 		else if (token == "camera") {
@@ -75,53 +49,18 @@ system::system(const char *filename): m_scene(new scene()) {
 			float xFOV, nearClip, farClip;
 			bool res(false), pos(false), dir(false), fov(false), cli(false);
 			
-			token.clear();
-			getline(file, token);
+			args["resolution"] = args["res"] = [&](std::istream& is){ is >> xRes >> yRes; res = true; };
+			args["antialiasing"] = args["supersampling"] = [&](std::istream& is){ is >> antialiasing; };
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
+			args["direction"] = [&](std::istream& is){ is >> direction; dir = true; };
+			args["fov"] = args["xfov"] = [&](std::istream& is){ is >> xFOV; fov = true; };
+			args["clipping"] = args["clip"] = [&](std::istream& is){ is >> nearClip >> farClip; cli = true; };
+			args["up"] = args["updirection"] = [&](std::istream& is){ is >> up; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "resolution" || token == "res") {
-					linestream >> xRes >> yRes;
-					res = true;
-				} else if (token == "antialiasing" || token == "AA") {
-					linestream >> antialiasing;
-				} else if (token == "position") {
-					linestream >> position;
-					pos = true;
-				} else if (token == "direction") {
-					linestream >> direction;
-					dir = true;
-				} else if (token == "fov" || token == "xfov") {
-					linestream >> xFOV;
-					fov = true;
-				} else if (token == "clipping" || token == "clip") {
-					linestream >> nearClip >> farClip;
-					cli = true;
-				} else if (token == "up" || token == "updirection") {
-					linestream >> up;
-				} else {
-					throw unrecognizedSymbol(token, "camera");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "camera");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!res || !pos || !dir || !fov || !cli) {
-				throw incompleteType("camera");
+				throw incompleteType(token);
 			}
 			
 			m_scene->setCamera(new camera(xRes, yRes, position, direction,xFOV, nearClip, farClip, m_scene->getShapes(), m_scene->getLights(), antialiasing, up));
@@ -133,45 +72,16 @@ system::system(const char *filename): m_scene(new scene()) {
 			float shininess{};
 			bool dif(false);
 			
-			token.clear();
-			getline(file, token);
+			args["ambient"] = [&](std::istream& is){ is >> ambient; };
+			args["diffuse"] = [&](std::istream& is){ is >> diffuse; dif = true; };
+			args["specular"] = [&](std::istream& is){ is >> specular; };
+			args["shininess"] = args["shine"] = [&](std::istream& is){ is >> shininess; };
+			args["glow"] = [&](std::istream& is){ is >> glow; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "ambient") {
-					linestream >> ambient;
-				} else if (token == "diffuse") {
-					linestream >> diffuse;
-					dif = true;
-				} else if (token == "specular") {
-					linestream >> specular;
-				} else if (token == "shininess" || token == "shine") {
-					linestream >> shininess;
-				} else if (token == "glow") {
-					linestream >> glow;
-				} else {
-					throw unrecognizedSymbol(token, "color");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "color");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!dif || name.length() < 1) {
-				throw incompleteType("color");
+				throw incompleteType(token);
 			}
 			
 			colors[name] = new colordata(ambient, diffuse, specular, shininess, glow);
@@ -183,47 +93,19 @@ system::system(const char *filename): m_scene(new scene()) {
 			FLOAT3 position{}, normal{};
 			bool clr(false), pos(false), nor(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){
+				getline(is, colorname);
+				clr = true;
+				if (colors.find(colorname) == colors.end())
+					throw unrecognizedSymbol(colorname, token);
+			};
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
+			args["normal"] = [&](std::istream& is){ is >> normal; nor = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token >> std::ws;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "color") {
-					getline(linestream, colorname);
-					
-					if (colors.find(colorname) == colors.end())
-						throw unrecognizedSymbol(colorname, "plane");
-					
-					clr = true;
-				} else if (token == "position" || token == "pos") {
-					linestream >> position;
-					pos = true;
-				} else if (token == "normal") {
-					linestream >> normal;
-					nor = true;
-				} else {
-					throw unrecognizedSymbol(token, "plane");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "plane");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !pos || !nor) {
-				throw incompleteType("plane");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addShape(new plane(*colors[colorname], position, normal));
@@ -236,47 +118,19 @@ system::system(const char *filename): m_scene(new scene()) {
 			float radius{};
 			bool clr(false), pos(false), rad(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){
+				getline(is, colorname);
+				clr = true;
+				if (colors.find(colorname) == colors.end())
+					throw unrecognizedSymbol(colorname, token);
+			};
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
+			args["radius"] = [&](std::istream& is){ is >> radius; rad = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token >> std::ws;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "color") {
-					getline(linestream, colorname);
-					
-					if (colors.find(colorname) == colors.end())
-						throw unrecognizedSymbol(colorname, "sphere");
-					
-					clr = true;
-				} else if (token == "position" || token == "pos") {
-					linestream >> position;
-					pos = true;
-				} else if (token == "radius") {
-					linestream >> radius;
-					rad = true;
-				} else {
-					throw unrecognizedSymbol(token, "sphere");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "sphere");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !pos || !rad) {
-				throw incompleteType("sphere");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addShape(new sphere(*colors[colorname], position, radius));
@@ -289,48 +143,19 @@ system::system(const char *filename): m_scene(new scene()) {
 			float radius{};
 			bool clr(false), pos(false), rad(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){
+				getline(is, colorname);
+				clr = true;
+				if (colors.find(colorname) == colors.end())
+					throw unrecognizedSymbol(colorname, token);
+			};
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
+			args["radius"] = [&](std::istream& is){ is >> radius; rad = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token >> std::ws;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				}
-				else if (token == "color") {
-					getline(linestream, colorname);
-					
-					if (colors.find(colorname) == colors.end())
-						throw unrecognizedSymbol(colorname, "cylinder");
-					
-					clr = true;
-				} else if (token == "position" || token == "pos") {
-					linestream >> position;
-					pos = true;
-				} else if (token == "radius") {
-					linestream >> radius;
-					rad = true;
-				} else {
-					throw unrecognizedSymbol(token, "cylinder");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "cylinder");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !pos || !rad) {
-				throw incompleteType("cylinder");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addShape(new cylinder(*colors[colorname], position, radius));
@@ -343,45 +168,19 @@ system::system(const char *filename): m_scene(new scene()) {
 			quadric::equation quadratic;
 			bool clr(false), pos(false), equ(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){
+				getline(is, colorname);
+				clr = true;
+				if (colors.find(colorname) == colors.end())
+					throw unrecognizedSymbol(colorname, token);
+			};
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
+			args["equation"] = [&](std::istream& is){ is >> quadratic; equ = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token >> std::ws;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "color") {
-					getline(linestream, colorname);
-					if (colors.find(colorname) == colors.end())
-						throw unrecognizedSymbol(colorname, "quadric");
-					clr = true;
-				} else if (token == "position" || token == "pos") {
-					linestream >> position;
-					pos = true;
-				} else if (token == "equation") {
-					linestream >> quadratic;
-					equ = true;
-				} else {
-					throw unrecognizedSymbol(token, "quadric");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "quadric");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !pos || !equ) {
-				throw incompleteType("quadric");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addShape(new quadric(*colors[colorname], position, quadratic));
@@ -392,40 +191,13 @@ system::system(const char *filename): m_scene(new scene()) {
 			FLOAT3 color{}, position{};
 			bool clr(false), pos(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){ is >> color; clr = true; };
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "color") {
-					linestream >> color;
-					clr = true;
-				} else if (token == "position" || token == "pos") {
-					linestream >> position;
-					pos = true;
-				} else {
-					throw unrecognizedSymbol(token, "pointlight");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "pointlight");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !pos) {
-				throw incompleteType("pointlight");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addLight(new pointlight(color, position));
@@ -436,40 +208,13 @@ system::system(const char *filename): m_scene(new scene()) {
 			FLOAT3 color{}, direction{};
 			bool clr(false), dir(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){ is >> color; clr = true; };
+			args["direction"] = [&](std::istream& is){ is >> direction; dir = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "color") {
-					linestream >> color;
-					clr = true;
-				} else if (token == "direction") {
-					linestream >> direction;
-					dir = true;
-				} else {
-					throw unrecognizedSymbol(token, "directlight");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "directlight");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !dir) {
-				throw incompleteType("directlight");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addLight(new directionlight(color, direction));
@@ -481,46 +226,15 @@ system::system(const char *filename): m_scene(new scene()) {
 			float angle{};
 			bool clr(false), pos(false), dir(false), ang(false);
 			
-			token.clear();
-			getline(file, token);
+			args["color"] = [&](std::istream& is){ is >> color; clr = true; };
+			args["position"] = [&](std::istream& is){ is >> position; pos = true; };
+			args["direction"] = [&](std::istream& is){ is >> direction; dir = true; };
+			args["angle"] = [&](std::istream& is){ is >> angle; ang = true; };
 			
-			while (token != "") {
-				linestream.clear();
-				linestream << token;
-				token.clear();
-				
-				linestream >> token;
-				
-				if (token[0] == '#') {
-					getline(linestream, token);
-				} else if (token == "color") {
-					linestream >> color;
-					clr = true;
-				} else if (token == "position") {
-					linestream >> position;
-					pos = true;
-				} else if (token == "direction") {
-					linestream >> direction;
-					dir = true;
-				} else if (token == "angle") {
-					linestream >> angle;
-					ang = true;
-				} else {
-					throw unrecognizedSymbol(token, "spotlight");
-				}
-				
-				if (!linestream.eof()) {
-					token.clear();
-					getline(linestream, token);
-					throw unrecognizedSymbol(token, "spotlight");
-				}
-				
-				token.clear();
-				getline(file, token);
-			}
+			takeObject(file, args, token);
 			
 			if (!clr || !pos || !dir || !ang) {
-				throw incompleteType("spotlight");
+				throw incompleteType(token);
 			}
 			
 			m_scene->addLight(new spotlight(color, position, direction, angle));
@@ -535,6 +249,7 @@ system::system(const char *filename): m_scene(new scene()) {
 		name.clear();
 		linestream.str(std::string());
 		linestream.clear();
+		args.clear();
 	}
 	
 	for (auto& p : colors)
@@ -555,4 +270,39 @@ const camera* system::getCamera() const {
 
 GLfloat* system::capture() {
 	return m_scene->capture();
+}
+
+void system::takeObject(std::istream& is, std::map<std::string, std::function<void (std::istream&)>> args, std::string& object) {
+	std::string token;
+	std::stringstream linestream;
+	
+	getline(is, token);
+	
+	while (token != "") {
+		linestream.clear();
+		linestream << token;
+		token.clear();
+		
+		linestream >> token >> std::ws;
+		
+		if (token[0] == '#')
+			getline(linestream, token);
+		else {
+			auto itr(args.find(token));
+			
+			if (itr == args.end())
+				throw unrecognizedSymbol(token, object);
+			else
+				itr->second(linestream);
+		}
+		
+		if (!linestream.eof()) {
+			token.clear();
+			getline(linestream, token);
+			throw unrecognizedSymbol(token, object);
+		}
+		
+		token.clear();
+		getline(is, token);
+	}
 }
