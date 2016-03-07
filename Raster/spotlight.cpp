@@ -7,24 +7,30 @@
 
 #include "spotlight.h"
 
-spotlight::spotlight(const FLOAT3& color, const FLOAT3& position, const FLOAT3& direction, const float& angle) {
+spotlight::spotlight(const FLOAT3& color, const FLOAT3& position, const FLOAT3& direction, const float& angle, const float& softAngle) {
 	m_color = new FLOAT3(color);
 	m_position = new FLOAT3(position);
 	m_direction = new FLOAT3(direction.normalize());
 	m_angle = new float(angle);
+	m_softAngle = new float(softAngle);
 }
 
 spotlight::~spotlight() {
 	delete m_color;
 	delete m_position;
+	delete m_direction;
 	
-	m_color = 0;
-	m_position = 0;
+	m_color = m_position = m_direction = 0;
+	
+	delete m_angle;
+	delete m_softAngle;
+	
+	m_angle = m_softAngle = 0;
 }
 
 
 light::lighttype spotlight::getType() const {
-	return point;
+	return spot;
 }
 
 

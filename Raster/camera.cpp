@@ -163,15 +163,12 @@ void camera::updateViewport() {
 
 // traces rays to find the closest shapes, and performs the antialiasing
 FLOAT3 camera::castRays(const FLOAT3& origin, const FLOAT3& ambientLight, const float& diffuseOffset) const {
-	// set the default pixel color
-	FLOAT3 pixel{0.0f, 0.0f, 0.0f};
+	float horiOffset, vertOffset, zValue;
+	FLOAT3 subsample, ray, pixel{0.0f, 0.0f, 0.0f};
+	shape *closest = 0;
 	
 	// collect samples of the scene for this current pixel
 	for (int samples = 0; samples < *m_antialiasing; ++samples) {
-		float horiOffset, vertOffset, zValue;
-		FLOAT3 subsample, ray, color;
-		shape *closest = 0;
-		
 		// randomly generate offsets for the current subsample
 		horiOffset = (*m_unif)(*m_rng), vertOffset = (*m_unif)(*m_rng);
 		
@@ -181,7 +178,6 @@ FLOAT3 camera::castRays(const FLOAT3& origin, const FLOAT3& ambientLight, const 
 		
 		// initialize for color sampling
 		zValue = *m_farClip;
-		color = {0.0f, 0.0f, 0.0f};
 		
 		// detect the closest shape
 		for (shape *s : *shapes) {

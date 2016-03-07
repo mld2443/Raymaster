@@ -22,6 +22,7 @@
 
 
 int window = 0;
+bool verbose = false;
 
 
 class system *tracer;
@@ -32,13 +33,15 @@ void display() {
 
 	glFlush();
 	
-	std::cout << "Tracing...";
+	if (verbose)
+		std::cout << "Tracing...";
 	auto wcts = std::chrono::system_clock::now();
 
 	GLfloat *pixels = tracer->capture();
 
 	std::chrono::duration<double> wctduration = (std::chrono::system_clock::now() - wcts);
-	std::cout << '\t' << wctduration.count() << "s" << std::endl;
+	if (verbose)
+		std::cout << '\t' << wctduration.count() << "s" << std::endl;
 
 	glDrawPixels(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT), GL_RGB, GL_FLOAT, pixels);
 
@@ -103,18 +106,24 @@ void key(unsigned char c, int x, int y) {
 
 int main(int argc, char** argv) {
 	if (argc != 2) {
-		std:: cout << "Expected \"" << argv[0] <<  " file.scene\"\n" << std::endl;
-		return 1;
+		if (argc != 3 || !(argv[2][0] == '-' && argv[2][1] == 'v' && argv[2][2] == '\0')) {
+			std:: cout << "Expected \"" << argv[0] <<  " file.scene\" [-v]" << std::endl;
+			return 1;
+		}
+		
+		verbose = true;
 	}
 	
 	try {
-		std::cout << "Loading...";
-		auto wcts = std::chrono::system_clock::now();
+		if (verbose)
+			std::cout << "Loading...";
+		auto wcts(std::chrono::system_clock::now());
 		
 		tracer = new class system(argv[1]);
 		
-		std::chrono::duration<double> wctduration = (std::chrono::system_clock::now() - wcts);
-		std::cout << '\t' << wctduration.count() << "s" << std::endl;
+		std::chrono::duration<double> wctduration(std::chrono::system_clock::now() - wcts);
+		if (verbose)
+			std::cout << '\t' << wctduration.count() << "s" << std::endl;
 	}
 	catch(const std::exception& e){
 		std::cout << std::endl << "Exception occured: " << e.what() << std::endl;
