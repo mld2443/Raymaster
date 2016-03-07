@@ -13,8 +13,8 @@ I have provided an example scene, "example.scene" for testing purposes.
 
 TODO List:
 * <strike>Encapsulate the scene/camera paradigm in a new class</strike>
+* <strike>Parallelize the tracing</strike>
 * <b>Ditch OpenGL for a simple PNG writer</b>
-* <b>Parallelize the tracing</b>
 * Add in rotations
 * Realistic supersampling
 * Add finite shapes / unions and subtractions
