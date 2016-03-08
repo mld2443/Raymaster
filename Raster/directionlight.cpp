@@ -7,16 +7,16 @@
 
 #include "directionlight.h"
 
-directionlight::directionlight(const FLOAT3& c, const FLOAT3& n) {
-	m_color = new FLOAT3(c);
+directionlight::directionlight(const RGBA& c, const FLOAT3& n) {
+	m_color = new RGBA(c);
 	m_normal = new FLOAT3(n.normalize());
 }
 
 directionlight::~directionlight() {
 	delete m_color;
-	delete m_normal;
-	
 	m_color = 0;
+	
+	delete m_normal;
 	m_normal = 0;
 }
 

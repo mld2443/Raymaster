@@ -92,10 +92,10 @@ void camera::setNormal(const FLOAT3& normal) {
 
 
 // starts the ray tracing, everything begins here
-GLfloat* camera::capture(const FLOAT3& ambientLight, const float& diffuseOffset){
+std::vector<RGBA> camera::capture(const RGBA& ambientLight, const float& diffuseOffset){
 	threadpool pool(THREADPOOLSIZE);
-	GLfloat *pixels = new GLfloat[*m_xRes * *m_yRes * 3];
-	auto futurepixels = std::vector<std::future<FLOAT3>>();
+	std::vector<RGBA> pixels;
+	auto futurepixels = std::vector<std::future<RGBA>>();
 	FLOAT3 vRay{}, hRay{};
 	
 	// update the viewpoint in case the camera is moving
@@ -116,10 +116,8 @@ GLfloat* camera::capture(const FLOAT3& ambientLight, const float& diffuseOffset)
 	}
 	
 	for (int i = 0; i < futurepixels.size(); ++i) {
-		FLOAT3 pixel = futurepixels[i].get();
-		pixels[(3 * i) + 0] = pixel.x;
-		pixels[(3 * i) + 1] = pixel.y;
-		pixels[(3 * i) + 2] = pixel.z;
+		RGBA pixel = futurepixels[i].get();
+		pixels.push_back(pixel);
 	}
 	
 	return pixels;
@@ -162,9 +160,10 @@ void camera::updateViewport() {
 }
 
 // traces rays to find the closest shapes, and performs the antialiasing
-FLOAT3 camera::castRays(const FLOAT3& origin, const FLOAT3& ambientLight, const float& diffuseOffset) const {
+RGBA camera::castRays(const FLOAT3& origin, const RGBA& ambientLight, const float& diffuseOffset) const {
 	float horiOffset, vertOffset, zValue;
-	FLOAT3 subsample, ray, pixel{0.0f, 0.0f, 0.0f};
+	FLOAT3 subsample, ray;
+	RGBA pixel{};
 	shape *closest = 0;
 	
 	// collect samples of the scene for this current pixel
@@ -197,8 +196,9 @@ FLOAT3 camera::castRays(const FLOAT3& origin, const FLOAT3& ambientLight, const 
 }
 
 // samples a shape at a point to get a color given the current lighting conditions
-FLOAT3 camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const FLOAT3& ambientLight, const float& diffuseOffset) const {
-	FLOAT3 glow{}, ambient{}, diffuse{}, specular{}, directionToLight{};
+RGBA camera::getColor(const shape *s, const FLOAT3& point, const FLOAT3& toEye, const RGBA& ambientLight, const float& diffuseOffset) const {
+	RGBA glow{}, ambient{}, diffuse{}, specular{};
+	FLOAT3 directionToLight{};
 	
 	// color independant of all other lighting conditions
 	glow = s->getGlow();

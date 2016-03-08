@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "camera::getColor(shape const*, FLOAT3 const&amp;, FLOAT3 const&amp;, RGBA const&amp;, float const&amp;) const:camera.cpp">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

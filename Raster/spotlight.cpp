@@ -7,8 +7,8 @@
 
 #include "spotlight.h"
 
-spotlight::spotlight(const FLOAT3& color, const FLOAT3& position, const FLOAT3& direction, const float& angle, const float& softAngle) {
-	m_color = new FLOAT3(color);
+spotlight::spotlight(const RGBA& color, const FLOAT3& position, const FLOAT3& direction, const float& angle, const float& softAngle) {
+	m_color = new RGBA(color);
 	m_position = new FLOAT3(position);
 	m_direction = new FLOAT3(direction.normalize());
 	m_angle = new float(angle);
@@ -17,14 +17,14 @@ spotlight::spotlight(const FLOAT3& color, const FLOAT3& position, const FLOAT3& 
 
 spotlight::~spotlight() {
 	delete m_color;
+	m_color = 0;
+	
 	delete m_position;
 	delete m_direction;
-	
-	m_color = m_position = m_direction = 0;
+	m_position = m_direction = 0;
 	
 	delete m_angle;
 	delete m_softAngle;
-	
 	m_angle = m_softAngle = 0;
 }
 

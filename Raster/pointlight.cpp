@@ -7,16 +7,16 @@
 
 #include "pointlight.h"
 
-pointlight::pointlight(const FLOAT3& color, const FLOAT3& position) {
-	m_color = new FLOAT3(color);
+pointlight::pointlight(const RGBA& color, const FLOAT3& position) {
+	m_color = new RGBA(color);
 	m_position = new FLOAT3(position);
 }
 
 pointlight::~pointlight() {
 	delete m_color;
-	delete m_position;
-	
 	m_color = 0;
+	
+	delete m_position;
 	m_position = 0;
 }
 

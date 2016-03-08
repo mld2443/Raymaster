@@ -9,6 +9,7 @@
 #define float3_h
 
 #include <iostream>
+#include <sstream>
 #include <math.h>
 
 struct FLOAT3 {

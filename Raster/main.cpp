@@ -12,8 +12,10 @@
 	#include <GL/glut.h>
 #endif
 #include <iostream>
+#include <vector>
 #include <chrono>
 
+//#include "lodepng.h"
 #include "system.h"
 
 
@@ -28,6 +30,16 @@ bool verbose = false;
 class system *tracer;
 
 
+//void encodeOneStep(const char* filename, std::vector<unsigned char>& image, unsigned width, unsigned height)
+//{
+//	//Encode the image
+//	unsigned error = lodepng::encode(filename, image, width, height);
+//	
+//	//if there's an error, display it
+//	if(error)
+//		std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+//}
+//
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -37,7 +49,15 @@ void display() {
 		std::cout << "Tracing...";
 	auto wcts = std::chrono::system_clock::now();
 
-	GLfloat *pixels = tracer->capture();
+	GLfloat *pixels = new GLfloat[glutGet(GLUT_WINDOW_WIDTH) * glutGet(GLUT_WINDOW_HEIGHT) * 3];
+	
+	auto rgba = tracer->capture();
+	
+	for (int i = 0; i < rgba.size(); ++i) {
+		pixels[(3 * i) + 0] = rgba[i].R;
+		pixels[(3 * i) + 1] = rgba[i].G;
+		pixels[(3 * i) + 2] = rgba[i].B;
+	}
 
 	std::chrono::duration<double> wctduration = (std::chrono::system_clock::now() - wcts);
 	if (verbose)
@@ -47,7 +67,7 @@ void display() {
 
 	glFlush();
 
-	delete[] pixels;
+//	delete[] pixels;
 
 	glutSwapBuffers();
 }

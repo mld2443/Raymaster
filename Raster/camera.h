@@ -8,12 +8,6 @@
 #ifndef camera_h
 #define camera_h
 
-#ifdef __APPLE__
-	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-	#include <GLUT/glut.h>
-#else
-	#include <GL/glut.h>
-#endif
 #include <random>
 #include <vector>
 #include <list>
@@ -21,10 +15,11 @@
 #include "threadpool.h"
 #include "shape.h"
 #include "light.h"
+#include "rgba.h"
 
 
 // The maximum number of threads to use while drawing
-#define THREADPOOLSIZE 5
+#define THREADPOOLSIZE 1
 
 
 class camera {
@@ -47,13 +42,13 @@ public:
 	void setPos(const FLOAT3&);
 	void setNormal(const FLOAT3&);
 	
-	GLfloat* capture(const FLOAT3&, const float&);
+	std::vector<RGBA> capture(const RGBA&, const float&);
 	
 private:
 	void updateViewport();
 	
-	FLOAT3 castRays(const FLOAT3&, const FLOAT3&, const float&) const;
-	FLOAT3 getColor(const shape*, const FLOAT3&, const FLOAT3&, const FLOAT3&, const float&) const;
+	RGBA castRays(const FLOAT3&, const RGBA&, const float&) const;
+	RGBA getColor(const shape*, const FLOAT3&, const FLOAT3&, const RGBA&, const float&) const;
 	bool obstructed(const shape*, const FLOAT3&, const FLOAT3&, const light*) const;
 	
 	unsigned int *m_xRes, *m_yRes, *m_antialiasing;

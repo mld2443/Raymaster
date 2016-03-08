@@ -12,7 +12,7 @@
 
 class pointlight : public light {
 public:
-	pointlight(const FLOAT3& color, const FLOAT3& position);
+	pointlight(const RGBA& color, const FLOAT3& position);
 	~pointlight();
 	
 	lighttype getType() const;

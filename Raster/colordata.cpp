@@ -7,20 +7,20 @@
 
 #include "colordata.h"
 
-colordata::colordata(const FLOAT3& amb, const FLOAT3& dif, const FLOAT3& spe, const float& shi, const FLOAT3& glo) {
-	m_ambient = new FLOAT3(amb);
-	m_diffuse = new FLOAT3(dif);
-	m_specular = new FLOAT3(spe);
+colordata::colordata(const RGBA& amb, const RGBA& dif, const RGBA& spe, const float& shi, const RGBA& glo) {
+	m_ambient = new RGBA(amb);
+	m_diffuse = new RGBA(dif);
+	m_specular = new RGBA(spe);
 	m_shininess = new float(shi);
-	m_glow = new FLOAT3(glo);
+	m_glow = new RGBA(glo);
 }
 
 colordata::colordata(const colordata& c):
-	m_ambient(new FLOAT3(*c.m_ambient)),
-	m_diffuse(new FLOAT3(*c.m_diffuse)),
-	m_specular(new FLOAT3(*c.m_specular)),
+	m_ambient(new RGBA(*c.m_ambient)),
+	m_diffuse(new RGBA(*c.m_diffuse)),
+	m_specular(new RGBA(*c.m_specular)),
 	m_shininess(new float(*c.m_shininess)),
-	m_glow(new FLOAT3(*c.m_glow)) {}
+	m_glow(new RGBA(*c.m_glow)) {}
 
 colordata::~colordata() {
 	delete m_ambient;
@@ -37,15 +37,15 @@ colordata::~colordata() {
 }
 
 
-FLOAT3 colordata::getAmbient() const {
+RGBA colordata::getAmbient() const {
 	return *m_ambient;
 }
 
-FLOAT3 colordata::getDiffuse() const {
+RGBA colordata::getDiffuse() const {
 	return *m_diffuse;
 }
 
-FLOAT3 colordata::getSpecular() const{
+RGBA colordata::getSpecular() const{
 	return *m_specular;
 }
 
@@ -53,6 +53,6 @@ float colordata::getShininess() const{
 	return *m_shininess;
 }
 
-FLOAT3 colordata::getGlow() const{
+RGBA colordata::getGlow() const{
 	return *m_glow;
 }

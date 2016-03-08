@@ -7,11 +7,11 @@
 
 #include "scene.h"
 
-scene::scene(const FLOAT3& ambientLight, const float& diffuseOffset):
+scene::scene(const RGBA& ambientLight, const float& diffuseOffset):
 	m_camera(0),
 	m_shapes(new std::list<shape*>()),
 	m_lights(new std::list<light*>()),
-	m_ambientLight(new FLOAT3(ambientLight)),
+	m_ambientLight(new RGBA(ambientLight)),
 	m_diffuseOffset(new float(diffuseOffset)) {}
 
 scene::~scene() {
@@ -83,7 +83,7 @@ const camera* scene::getCamera() const {
 	return m_camera;
 }
 
-FLOAT3 scene::getAmbientLight() const {
+RGBA scene::getAmbientLight() const {
 	return *m_ambientLight;
 }
 
@@ -107,7 +107,7 @@ void scene::setCamera(camera* cam) {
 	m_camera = cam;
 }
 
-void scene::setAmbientLight(const FLOAT3& ambient) {
+void scene::setAmbientLight(const RGBA& ambient) {
 	*m_ambientLight = ambient;
 }
 
@@ -125,7 +125,7 @@ void scene::addLight(light* l) {
 }
 
 
-GLfloat* scene::capture() {
+std::vector<RGBA> scene::capture() {
 	return m_camera->capture(*m_ambientLight, *m_diffuseOffset);
 }
 

@@ -14,7 +14,7 @@
 
 class directionlight : public light {
 public:
-	directionlight(const FLOAT3& color, const FLOAT3& normal);
+	directionlight(const RGBA& color, const FLOAT3& normal);
 	~directionlight();
 	
 	lighttype getType() const;

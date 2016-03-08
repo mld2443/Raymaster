@@ -19,3 +19,7 @@ TODO List:
 * Realistic supersampling
 * Add finite shapes / unions and subtractions
 * Add subdivision surfaces
+
+COPYING
+
+Take it. Please give credit where it's due, to me or any of the libraries I use (especially the threadpool code, which is brilliant).

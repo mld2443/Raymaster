@@ -16,11 +16,11 @@ public:
 	enum shapetype { plane, sphere, cylinder, quadric };
 
 	virtual shapetype getType() const =0;
-	FLOAT3 getAmbient() const;
-	FLOAT3 getDiffuse() const;
-	FLOAT3 getSpecular() const;
+	RGBA getAmbient() const;
+	RGBA getDiffuse() const;
+	RGBA getSpecular() const;
 	float getShininess() const;
-	FLOAT3 getGlow() const;
+	RGBA getGlow() const;
 	FLOAT3 getPos() const;
 	
 	virtual FLOAT3 getNormal(const FLOAT3& point) const =0;

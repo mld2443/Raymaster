@@ -14,7 +14,7 @@
 
 class spotlight : public light {
 public:
-	spotlight(const FLOAT3& color, const FLOAT3& position, const FLOAT3& direction, const float& angle, const float& softAngle = 0.0f);
+	spotlight(const RGBA& color, const FLOAT3& position, const FLOAT3& direction, const float& angle, const float& softAngle = 0.0f);
 	~spotlight();
 	
 	lighttype getType() const;

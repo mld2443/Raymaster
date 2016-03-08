@@ -8,21 +8,17 @@
 #ifndef system_h
 #define system_h
 
-#ifdef __APPLE__
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
 #include <functional>
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <map>
 
-#include "scene.h"
 #include "camera.h"
+#include "scene.h"
+#include "rgba.h"
 
 class system {
 public:
@@ -52,7 +48,7 @@ public:
 	
 	const camera* getCamera() const;
 	
-	GLfloat* capture();
+	std::vector<RGBA> capture();
 	
 private:
 	static void takeObject(std::istream&, std::map<std::string, std::function<void (std::istream&)>>, std::string&);

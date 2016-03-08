@@ -8,15 +8,15 @@
 #include "shape.h"
 
 // all the getters
-FLOAT3 shape::getAmbient() const {
+RGBA shape::getAmbient() const {
 	return m_colors->getAmbient();
 }
 
-FLOAT3 shape::getDiffuse() const {
+RGBA shape::getDiffuse() const {
 	return m_colors->getDiffuse();
 }
 
-FLOAT3 shape::getSpecular() const {
+RGBA shape::getSpecular() const {
 	return m_colors->getSpecular();
 }
 
@@ -24,7 +24,7 @@ float shape::getShininess() const {
 	return m_colors->getShininess();
 }
 
-FLOAT3 shape::getGlow() const {
+RGBA shape::getGlow() const {
 	return m_colors->getGlow();
 }
 

@@ -34,7 +34,7 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		// Define our scene
 		else if (token == "scene") {
-			FLOAT3 ambient{};
+			RGBA ambient{};
 			float offset{};
 			
 			args["ambient"] = [&](std::istream& is){ is >> ambient; m_scene->setAmbientLight(ambient); };
@@ -68,7 +68,7 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		// Define a color
 		else if (token == "color") {
-			FLOAT3 ambient{}, diffuse{}, specular{}, glow{};
+			RGBA ambient{}, diffuse{}, specular{}, glow{};
 			float shininess{};
 			bool dif(false);
 			
@@ -188,7 +188,8 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		// add point light
 		else if (token == "pointlight") {
-			FLOAT3 color{}, position{};
+			RGBA color{};
+			FLOAT3 position{};
 			bool clr(false), pos(false);
 			
 			args["color"] = [&](std::istream& is){ is >> color; clr = true; };
@@ -205,7 +206,8 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		// add directional light
 		else if (token == "directlight") {
-			FLOAT3 color{}, direction{};
+			RGBA color{};
+			FLOAT3 direction{};
 			bool clr(false), dir(false);
 			
 			args["color"] = [&](std::istream& is){ is >> color; clr = true; };
@@ -222,7 +224,8 @@ system::system(const char *filename): m_scene(new scene()) {
 		
 		// add spotlight
 		else if (token == "spotlight") {
-			FLOAT3 color{}, position{}, direction{};
+			RGBA color{};
+			FLOAT3 position{}, direction{};
 			float angle{};
 			bool clr(false), pos(false), dir(false), ang(false);
 			
@@ -268,7 +271,7 @@ const camera* system::getCamera() const {
 	return m_scene->getCamera();
 }
 
-GLfloat* system::capture() {
+std::vector<RGBA> system::capture() {
 	return m_scene->capture();
 }
 
